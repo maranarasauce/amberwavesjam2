@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 891033826}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Bullet Origin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -296,7 +296,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 86382983146601595}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Uzi
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -589,7 +589,7 @@ GameObject:
   - component: {fileID: 4891455337236980440}
   - component: {fileID: 1994427944666211929}
   - component: {fileID: 5631288735959862487}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Magazine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1037,7 +1037,7 @@ GameObject:
   - component: {fileID: 4556589170727644977}
   - component: {fileID: 3138213234968175717}
   - component: {fileID: 7064252140814062592}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Slide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1976,12 +1976,12 @@ MonoBehaviour:
   reloadSrc: {fileID: 8356578041375006172}
   grenadeSrc: {fileID: 4405765671458621060}
   grenadeFireClip: {fileID: 8300000, guid: 80a39b00b46c5bd4aa9e0991ebddc982, type: 3}
-  grenadeReloadedClip: {fileID: 8300000, guid: 5c235cdd25e9dd74d988bdb437daf28d, type: 3}
+  grenadeReloadedClip: {fileID: 8300000, guid: 285dee1a168872c4ca2262b12394bf2d, type: 3}
   animator: {fileID: 8356578041375006171}
   reloadEvent: {fileID: 8356578041375006168}
   quadFlare: {fileID: 2474385022517949836}
   gunTip: {fileID: 891033826}
-  Damage: 5
+  Damage: 1
   grenadePrefab: {fileID: 935860278282618958, guid: 20e960dafd63039419cda7f8f03ed391,
     type: 3}
   grenadeLobForce: 20
@@ -2116,7 +2116,7 @@ GameObject:
   - component: {fileID: 1038039449266473076}
   - component: {fileID: 1881145288002801347}
   - component: {fileID: 8568734943583078079}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ESightC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
