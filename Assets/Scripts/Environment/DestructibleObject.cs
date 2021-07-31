@@ -6,11 +6,13 @@ using UnityEngine;
 public class DestructibleObject : MonoBehaviour, IDamageable
 {
     public float Health { get => health; }
+    float maxHealth;
     public float LastDamageValue { get => lastDamage; }
 
     [SerializeField] private ParticleSystem damagePS;
     [SerializeField] private ParticleSystem killPS;
     [SerializeField] private float health;
+    MeshRenderer meshRenderer;
 
     public event Action OnDamage;
     public event Action OnKill;
@@ -19,14 +21,17 @@ public class DestructibleObject : MonoBehaviour, IDamageable
 
     private void Start()
     {
+        maxHealth = health;
         OnDamage += damagePS.Play;
         OnKill   += killPS.Play;
+        meshRenderer = GetComponent<MeshRenderer>();
     }
 
     public void DoDamage(float damage)
     {
         health -= damage;
         lastDamage = damage;
+        meshRenderer.material.SetFloat("_DmgAmount", health / maxHealth);
 
         OnDamage?.Invoke();
 

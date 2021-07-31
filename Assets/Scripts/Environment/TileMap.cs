@@ -20,7 +20,11 @@ public class TileMap : MonoBehaviour
         {
             for (int Y = 0; Y < mapDimensions.y; Y++)
             {
-                var tile = Instantiate(tilePrefab, new Vector3(X * prefabScale.x, spawnHeight, Y * prefabScale.y), Quaternion.identity, transform);
+                int randomRot = UnityEngine.Random.Range(0, 360);
+                randomRot /= 90;
+                randomRot *= 90;
+                Vector3 euler = new Vector3(0, randomRot, 0);
+                var tile = Instantiate(tilePrefab, new Vector3(X * prefabScale.x, spawnHeight, Y * prefabScale.y), Quaternion.Euler(euler), transform);
                 tile.transform.localScale = new Vector3(prefabScale.x, 1, prefabScale.y);
             }
         }
