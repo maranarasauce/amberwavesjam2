@@ -26,11 +26,9 @@ public class Gun : MonoBehaviour
     }
 
     Transform playCam;
-    Rigidbody charBody;
     private void Start()
     {
         playCam = Camera.main.transform;
-        charBody = gameObject.GetComponent<Rigidbody>();
         ammo = maxAmmo;
         reloadEvent.executedAction += FinishReload;
     }
@@ -120,7 +118,6 @@ public class Gun : MonoBehaviour
         grenadePrefab.transform.position = transform.position;
         Rigidbody rb = grenadeObject.GetComponent<Rigidbody>();
         rb.AddForce(playCam.forward * 20f, ForceMode.VelocityChange);
-        charBody.AddForce(-playCam.forward * 100f, ForceMode.Impulse);
     }
 
     void Reload()
