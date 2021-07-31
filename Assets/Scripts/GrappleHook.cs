@@ -13,12 +13,16 @@ public class GrappleHook : MonoBehaviour
 
     public bool canGrapple;
 
+    public AudioSource grappleSrc;
+    public AudioClip launchClip;
+    public AudioClip pullClip;
+    public AudioClip reloadClip;
+
     [Header("Grapple Settings")]
     public float grappleMaxDistance;
     public float grappleForce;
     public float coolDown;
     public GameObject ropeTarget;
-
 
 
     public JointDrive newDrive;
@@ -57,7 +61,7 @@ public class GrappleHook : MonoBehaviour
             if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hitInfo, grappleMaxDistance))
             {
                 DrawRope(hitInfo.point);
-                StartCoroutine(wait(hitInfo));
+                StartCoroutine(WaitToGrapple(hitInfo));
             }
         }
     }
@@ -65,12 +69,10 @@ public class GrappleHook : MonoBehaviour
     public void Grapple(RaycastHit hitInfo)
     {
         canGrapple = false;
-        print("Tiddies");
         floatingCapsule.enabled = false;
         joint.xDrive = newDrive;
         joint.yDrive = newDrive;
         joint.zDrive = newDrive;
-        print("Boobies");
         playerRB.AddForce((hitInfo.point - transform.position) * grappleForce);
         StartCoroutine(waitForSec());
     }
@@ -90,12 +92,18 @@ public class GrappleHook : MonoBehaviour
         lr.positionCount = 1;
         floatingCapsule.enabled = true;
         yield return new WaitForSeconds(coolDown);
+        grappleSrc.clip = reloadClip;
+        grappleSrc.Play();
         canGrapple = true;
     }
 
-    public IEnumerator wait(RaycastHit hitInfo)
+    public IEnumerator WaitToGrapple(RaycastHit hitInfo)
     {
+        grappleSrc.clip = launchClip;
+        grappleSrc.Play();
         yield return new WaitForSeconds(0.1f);
+        grappleSrc.clip = pullClip;
+        grappleSrc.Play();
         Grapple(hitInfo);
     }
 
