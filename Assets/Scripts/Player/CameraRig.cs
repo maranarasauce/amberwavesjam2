@@ -82,7 +82,7 @@ namespace Maranara.SVR.Player
 
             //register the camera's last position for velocity calculation
             LastCamPos = playerCamera.localPosition;
-            //playerCameraDir.position = playerCamera.transform.position;
+            playerCameraDir.position = playerCamera.transform.position;
 
             //Move the entire CameraRig's localposition to that of the locosphere's (may need to offset it on the y axis a little bit so you're actually on the floor instead of the middle of the locosphere)
             Vector3 locoPosition = bodyToFollow.transform.position;
