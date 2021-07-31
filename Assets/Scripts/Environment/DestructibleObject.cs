@@ -36,7 +36,10 @@ public class DestructibleObject : MonoBehaviour, IDamageable
     {
         OnKill?.Invoke();
 
-        Destroy(this.gameObject, killDelay);
+        var pEmit = GetComponent<ParticleSystem>().emission;
+        pEmit.enabled = true;
+
+        //Destroy(this.gameObject, killDelay);
         Debug.Log("Destroyed object: " + gameObject.name);
     }
 }

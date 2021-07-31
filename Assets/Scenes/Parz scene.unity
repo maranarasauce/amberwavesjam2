@@ -229,9 +229,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d0b04f8e77cba4469136d0259d0b72d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ps: {fileID: 0}
   killDelay: 1
   health: 5
+  ps: {fileID: 0}
 --- !u!199 &380627459
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -312,7 +312,7 @@ ParticleSystem:
   ringBufferLoopRange: {x: 0, y: 1}
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 0
