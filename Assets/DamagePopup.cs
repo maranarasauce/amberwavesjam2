@@ -15,7 +15,7 @@ public class DamagePopup : MonoBehaviour
     public float moveYSpeed = 1f;
 
 
-    public void SetUp(int amount)
+    public void SetUp(float amount)
     {
         Text = gameObject.GetComponent<Text>();
         PlayerTransform = Camera.main.transform;
@@ -33,7 +33,7 @@ public class DamagePopup : MonoBehaviour
         {
             color.a -= fadeOutSpeed * Time.deltaTime;
             Text.color = color;
-            if(Text.color.a <= 0f)
+            if(color.a <= 0f)
             {
                 Destroy(gameObject);
             }
