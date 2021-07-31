@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,9 @@ public class Gun : MonoBehaviour
 {
     public AudioSource src;
     public AudioSource reloadSrc;
+    public AudioSource grenadeSrc;
+    public AudioClip grenadeFireClip;
+    public AudioClip grenadeReloadedClip;
     public Animator animator;
     public AnimEvent reloadEvent;
 
@@ -16,10 +20,10 @@ public class Gun : MonoBehaviour
         Reload = 2
     }
 
-    Transform camera;
+    Transform playCam;
     private void Start()
     {
-        camera = Camera.main.transform;
+        playCam = Camera.main.transform;
         ammo = maxAmmo;
         reloadEvent.executedAction += FinishReload;
     }
@@ -38,20 +42,35 @@ public class Gun : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(1))
         {
-            
+            if (grenadeReady)
+                GrenadeLaunch();
+        }
+        if (grenadeCooldownRate > 0)
+            grenadeCooldownRate -= Time.deltaTime;
+        else if (!grenadeReady)
+        {
+            grenadeSrc.clip = grenadeReloadedClip;
+            grenadeSrc.Play();
+            grenadeReady = true;
+            grenadeCooldownRate = 0;
         }
     }
 
+    public GameObject grenadePrefab;
+    public float grenadeLobForce = 20;
+    bool grenadeReady = true;
+    float grenadeCooldownRate;
     float timeTillFire;
-    int ammo;
+    [NonSerialized] public int ammo;
     public float fireRate;
+    public float grenadeCooldownTime;
     public int maxAmmo;
     bool reloading;
     void Fire()
     {
         if (timeTillFire > 0)
         {
-            timeTillFire -= Time.unscaledDeltaTime;
+            timeTillFire -= Time.deltaTime;
             return;
         }
         timeTillFire = fireRate;
@@ -64,9 +83,21 @@ public class Gun : MonoBehaviour
         SetAnim(Animation.Fire);
         ammo--;
         src.Stop();
-        src.pitch = UnityEngine.Random.Range(0.95f, 1.05f);
+        src.pitch = UnityEngine.Random.Range(0.97f, 1.02f);
         src.volume = UnityEngine.Random.Range(0.93f, 1.01f);
         src.Play();
+    }
+
+    void GrenadeLaunch()
+    {
+        grenadeReady = false;
+        grenadeCooldownRate = grenadeCooldownTime;
+        grenadeSrc.clip = grenadeFireClip;
+        grenadeSrc.Play();
+        GameObject grenadeObject = GameObject.Instantiate(grenadePrefab, playCam.position + (playCam.forward * 1.1f), playCam.rotation);
+        grenadePrefab.transform.position = transform.position;
+        Rigidbody rb = grenadeObject.GetComponent<Rigidbody>();
+        rb.AddForce(playCam.forward * 20f, ForceMode.VelocityChange);
     }
 
     void Reload()
