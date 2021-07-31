@@ -1,14 +1,18 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(ParticleSystem))]
 public class DestructibleObject : MonoBehaviour, IDamageable
 {
     public float Health { get => health; }
 
-    [SerializeField] private float killDelay = 1f;
+    [SerializeField] private float killDelay = 0f;
     [SerializeField] private float health;
 
+    public event Action OnDamage;
+    public event Action OnKill;
 
     private void Update()
     {
@@ -20,6 +24,8 @@ public class DestructibleObject : MonoBehaviour, IDamageable
     {
         health -= damage;
 
+        OnDamage?.Invoke();
+
         if(health <= 0)
         {
             Kill();
@@ -28,7 +34,9 @@ public class DestructibleObject : MonoBehaviour, IDamageable
 
     public void Kill()
     {
-        Debug.Log("Destroyed tile: " + gameObject.name);
+        OnKill?.Invoke();
+
         Destroy(this.gameObject, killDelay);
+        Debug.Log("Destroyed object: " + gameObject.name);
     }
 }
