@@ -13,6 +13,10 @@ public class Gun : MonoBehaviour
     public Animator animator;
     public AnimEvent reloadEvent;
 
+
+    public Transform gunTip;
+    public float Damage;
+
     enum Animation
     {
         Idle = 0,
@@ -82,6 +86,17 @@ public class Gun : MonoBehaviour
         }
         SetAnim(Animation.Fire);
         ammo--;
+
+        RaycastHit hitInfo;
+        if(Physics.Raycast(gunTip.position,gunTip.forward,out hitInfo, 10000f))
+        {
+            if(hitInfo.transform.TryGetComponent<IDamageable>(out IDamageable objectHit))
+            {
+                objectHit.DoDamage(Damage);
+            }
+        }
+
+
         src.Stop();
         src.pitch = UnityEngine.Random.Range(0.97f, 1.02f);
         src.volume = UnityEngine.Random.Range(0.93f, 1.01f);
