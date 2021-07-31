@@ -68,15 +68,15 @@ public class TileMapEditor : Editor
         }
 
 
-        //if (GUILayout.Button("Dithering i guess lol"))
-        //{
-        //    var transformTarget = (target as TileMap).transform;
+        if (GUILayout.Button("Dithering Iteration"))
+        {
+            var transformTarget = (target as TileMap).transform;
 
-        //    for (int i = 0; i < transformTarget.childCount; i++)
-        //    {
-        //        DestroyImmediate(transformTarget.GetChild(i).gameObject);
-        //    }
-        //}
+            for (int i = 0; i < transformTarget.childCount; i++)
+            {
+                DestroyImmediate(transformTarget.GetChild(i).gameObject);
+            }
+        }
     }
 }
 

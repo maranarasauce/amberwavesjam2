@@ -23,12 +23,6 @@ public class DestructibleObject : MonoBehaviour, IDamageable
         OnKill   += killPS.Play;
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-            DoDamage(1);
-    }
-
     public void DoDamage(float damage)
     {
         health -= damage;
