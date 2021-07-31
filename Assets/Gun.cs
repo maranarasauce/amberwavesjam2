@@ -12,7 +12,7 @@ public class Gun : MonoBehaviour
     public AudioClip grenadeReloadedClip;
     public Animator animator;
     public AnimEvent reloadEvent;
-
+    public Transform quadFlare;
 
     public Transform gunTip;
     public float Damage;
@@ -86,6 +86,8 @@ public class Gun : MonoBehaviour
         }
         SetAnim(Animation.Fire);
         ammo--;
+        float randomRot = UnityEngine.Random.Range(0f, 360f);
+        quadFlare.localRotation = Quaternion.Euler(new Vector3(0, 0, randomRot));
 
         RaycastHit hitInfo;
         if(Physics.Raycast(gunTip.position,gunTip.forward,out hitInfo, 10000f))
