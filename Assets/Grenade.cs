@@ -22,7 +22,7 @@ public class Grenade : MonoBehaviour
             {
                 rb.AddForce((transform.position - rb.position).normalized * -1000, ForceMode.Impulse);
             }
-            DestructibleObject desc = col.gameObject.GetComponent<DestructibleObject>();
+            DamageableObject desc = col.gameObject.GetComponent<DamageableObject>();
             if (desc == null)
                 continue;
             desc.DoDamage(damage);
