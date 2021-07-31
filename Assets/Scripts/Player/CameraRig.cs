@@ -11,7 +11,7 @@ namespace Maranara.SVR.Player
     {
         PlayerInput input;
         public Transform playerCamera;
-        //public Transform playerCameraDir;
+        public Transform playerCameraDir;
         public Transform headHolder;
         public MeshRenderer blackOutRenderer;
         public Transform leftControllerOffset;
@@ -66,7 +66,7 @@ namespace Maranara.SVR.Player
             Vector3 lockedDir = playerCamera.rotation.eulerAngles;
             lockedDir.x = 0;
             lockedDir.z = 0;
-            //playerCameraDir.transform.rotation = Quaternion.Euler(lockedDir);
+            playerCameraDir.transform.rotation = Quaternion.Euler(lockedDir);
 
             //Calculate camera's current velocity
             Vector3 cameraPosVelocity = ((playerCamera.localPosition) - (LastCamPos));
