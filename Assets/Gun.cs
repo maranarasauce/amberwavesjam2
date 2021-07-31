@@ -14,6 +14,7 @@ public class Gun : MonoBehaviour
     public Animator animator;
     public AnimEvent reloadEvent;
     public Transform quadFlare;
+    public LayerMask gunFireMask;
 
     public Transform gunTip;
     public float Damage;
@@ -92,7 +93,7 @@ public class Gun : MonoBehaviour
         quadFlare.localRotation = Quaternion.Euler(new Vector3(0, 0, randomRot));
 
         RaycastHit hitInfo;
-        if(Physics.Raycast(gunTip.position,gunTip.forward,out hitInfo, 10000f))
+        if(Physics.Raycast(gunTip.position, gunTip.forward, out hitInfo, 10000f, gunFireMask))
         {
             if(hitInfo.transform.TryGetComponent<IDamageable>(out IDamageable objectHit))
             {
@@ -118,6 +119,7 @@ public class Gun : MonoBehaviour
         grenadePrefab.transform.position = transform.position;
         Rigidbody rb = grenadeObject.GetComponent<Rigidbody>();
         rb.AddForce(playCam.forward * 20f, ForceMode.VelocityChange);
+        rb.AddTorque(-playCam.right * 10, ForceMode.VelocityChange);
     }
 
     void Reload()
