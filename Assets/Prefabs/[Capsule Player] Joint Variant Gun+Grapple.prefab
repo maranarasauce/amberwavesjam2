@@ -434,8 +434,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -2, y: 34}
-  m_SizeDelta: {x: 960, y: 540}
+  m_AnchoredPosition: {x: -2, y: 21}
+  m_SizeDelta: {x: 960, y: 566}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8852522584832025356
 CanvasRenderer:
@@ -630,12 +630,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -1024,8 +1024,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 29, y: 34}
-  m_SizeDelta: {x: 960, y: 540}
+  m_AnchoredPosition: {x: 29, y: 21}
+  m_SizeDelta: {x: 960, y: 566}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6037104016268757720
 CanvasRenderer:
@@ -1304,8 +1304,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -35, y: 34}
-  m_SizeDelta: {x: 960, y: 540}
+  m_AnchoredPosition: {x: -35, y: 21}
+  m_SizeDelta: {x: 960, y: 566}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1874048349873916356
 CanvasRenderer:
@@ -1634,7 +1634,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5739515451182944736}
   - component: {fileID: 1741219435530772687}
-  - component: {fileID: 1394416640027052561}
   - component: {fileID: 1817291765511527883}
   m_Layer: 8
   m_Name: Camera (1)
@@ -1666,7 +1665,7 @@ Camera:
   m_GameObject: {fileID: 8229515478275905508}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 4
+  m_ClearFlags: 3
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -1697,17 +1696,9 @@ Camera:
   m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
-  m_OcclusionCulling: 1
+  m_OcclusionCulling: 0
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &1394416640027052561
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8229515478275905508}
-  m_Enabled: 1
 --- !u!82 &1817291765511527883
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2299,7 +2290,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: -10.02}
+  m_ConnectedAnchor: {x: 14.6, y: 18, z: 5}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 2
