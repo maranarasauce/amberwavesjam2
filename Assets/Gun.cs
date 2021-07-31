@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
+    public UIController gunUI;
     public AudioSource src;
     public AudioSource reloadSrc;
     public AudioSource grenadeSrc;
@@ -54,6 +55,7 @@ public class Gun : MonoBehaviour
             grenadeCooldownRate -= Time.deltaTime;
         else if (!grenadeReady)
         {
+            gunUI.toggleGrenade(false);
             grenadeSrc.clip = grenadeReloadedClip;
             grenadeSrc.Play();
             grenadeReady = true;
@@ -108,6 +110,7 @@ public class Gun : MonoBehaviour
 
     void GrenadeLaunch()
     {
+        gunUI.toggleGrenade(true);
         grenadeReady = false;
         grenadeCooldownRate = grenadeCooldownTime;
         grenadeSrc.clip = grenadeFireClip;
