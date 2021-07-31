@@ -22,5 +22,7 @@ public class HealthBar : MonoBehaviour
     public void Update()
     {
         slider.value = idam.Health;
+
+        gameObject.transform.eulerAngles = Camera.main.transform.eulerAngles;
     }
 }
