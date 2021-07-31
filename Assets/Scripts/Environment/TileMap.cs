@@ -11,6 +11,8 @@ public class TileMap : MonoBehaviour
     public Vector2 prefabScale   = Vector2.one;    // Assumes prefab is a square, scaled at 1,1,1.
     public Vector2 mapDimensions = Vector2.one * 5;
 
+    [HideInInspector] public bool mapGenerated = false;
+
 
     public void GenerateMap()
     {
@@ -22,7 +24,23 @@ public class TileMap : MonoBehaviour
                 tile.transform.localScale = new Vector3(prefabScale.x, 1, prefabScale.y);
             }
         }
+
+        mapGenerated = true;
     }
+
+    public void ClearMap()
+    {
+        foreach (var child in GetComponentsInChildren<Transform>())
+        {
+            if (child == transform || child == null)
+                continue;
+
+            DestroyImmediate(child.gameObject);
+        }
+
+        mapGenerated = false;
+    }
+
 }
 
 #if UNITY_EDITOR
@@ -34,22 +52,19 @@ public class TileMapEditor : Editor
     {
         base.OnInspectorGUI();
 
+        var tileTarget = target as TileMap;
+
         if (GUILayout.Button("Generate"))
         {
-            (target as TileMap).GenerateMap();
+            if (tileTarget.mapGenerated)
+                tileTarget.ClearMap();
+
+            tileTarget.GenerateMap();
         }
 
         if (GUILayout.Button("Clear"))
         {
-            var transformTarget = (target as TileMap).transform;
-
-            foreach(var child in transformTarget.GetComponentsInChildren<Transform>())
-            {
-                if (child == transformTarget)
-                    continue;
-
-                DestroyImmediate(child.gameObject);
-            }
+            tileTarget.ClearMap();
         }
 
 
