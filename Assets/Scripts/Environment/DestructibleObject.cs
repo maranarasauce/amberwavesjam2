@@ -3,16 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(ParticleSystem))]
 public class DestructibleObject : MonoBehaviour, IDamageable
 {
     public float Health { get => health; }
+    public float LastDamageValue { get => lastDamage; }
 
-    [SerializeField] private float killDelay = 0f;
+    [SerializeField] private ParticleSystem damagePS;
+    [SerializeField] private ParticleSystem killPS;
     [SerializeField] private float health;
 
     public event Action OnDamage;
     public event Action OnKill;
+
+    private float lastDamage;
+
+    private void Start()
+    {
+        OnDamage += damagePS.Play;
+        OnKill   += killPS.Play;
+    }
 
     private void Update()
     {
@@ -23,6 +32,7 @@ public class DestructibleObject : MonoBehaviour, IDamageable
     public void DoDamage(float damage)
     {
         health -= damage;
+        lastDamage = damage;
 
         OnDamage?.Invoke();
 
@@ -36,10 +46,12 @@ public class DestructibleObject : MonoBehaviour, IDamageable
     {
         OnKill?.Invoke();
 
-        var pEmit = GetComponent<ParticleSystem>().emission;
-        pEmit.enabled = true;
+        GetComponent<Collider>().enabled = false;
+        GetComponent<Renderer>().enabled = false;
 
-        //Destroy(this.gameObject, killDelay);
+        var killDelay = killPS.main.startLifetimeMultiplier;
+
+        Destroy(this.gameObject, killDelay);
         Debug.Log("Destroyed object: " + gameObject.name);
     }
 }

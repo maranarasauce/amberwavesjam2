@@ -8,6 +8,7 @@ using UnityEngine.Events;
 public interface IDamageable
 {
     float Health { get; }
+    float LastDamageValue { get; }
 
     event Action OnDamage;
     event Action OnKill;
