@@ -5,6 +5,7 @@ using Maranara.InputShell;
 
 public class GrappleHook : MonoBehaviour
 {
+    public UIController gunUI;
     private Rigidbody playerRB;
     private InputManager inputManager;
     private FloatingCapsuleController floatingCapsule;
@@ -95,10 +96,12 @@ public class GrappleHook : MonoBehaviour
         grappleSrc.clip = reloadClip;
         grappleSrc.Play();
         canGrapple = true;
+        gunUI.toggleGrapple(false);
     }
 
     public IEnumerator WaitToGrapple(RaycastHit hitInfo)
     {
+        gunUI.toggleGrapple(true);
         grappleSrc.clip = launchClip;
         grappleSrc.Play();
         yield return new WaitForSeconds(0.1f);

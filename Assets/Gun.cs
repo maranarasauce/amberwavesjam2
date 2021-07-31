@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
+    public UIController gunUI;
     public AudioSource src;
     public AudioSource reloadSrc;
     public AudioSource grenadeSrc;
@@ -25,9 +26,11 @@ public class Gun : MonoBehaviour
     }
 
     Transform playCam;
+    Rigidbody charBody;
     private void Start()
     {
         playCam = Camera.main.transform;
+        charBody = gameObject.GetComponent<Rigidbody>();
         ammo = maxAmmo;
         reloadEvent.executedAction += FinishReload;
     }
@@ -53,6 +56,7 @@ public class Gun : MonoBehaviour
             grenadeCooldownRate -= Time.deltaTime;
         else if (!grenadeReady)
         {
+            gunUI.toggleGrenade(false);
             grenadeSrc.clip = grenadeReloadedClip;
             grenadeSrc.Play();
             grenadeReady = true;
@@ -107,6 +111,7 @@ public class Gun : MonoBehaviour
 
     void GrenadeLaunch()
     {
+        gunUI.toggleGrenade(true);
         grenadeReady = false;
         grenadeCooldownRate = grenadeCooldownTime;
         grenadeSrc.clip = grenadeFireClip;
@@ -115,6 +120,7 @@ public class Gun : MonoBehaviour
         grenadePrefab.transform.position = transform.position;
         Rigidbody rb = grenadeObject.GetComponent<Rigidbody>();
         rb.AddForce(playCam.forward * 20f, ForceMode.VelocityChange);
+        charBody.AddForce(-playCam.forward * 100f, ForceMode.Impulse);
     }
 
     void Reload()
