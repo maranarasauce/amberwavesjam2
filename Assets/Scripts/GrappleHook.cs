@@ -12,7 +12,9 @@ public class GrappleHook : MonoBehaviour
     private ConfigurableJoint joint;
     private LineRenderer lr;
 
-    public bool canGrapple;
+    public bool CanGrapple { get => canGrapple; }
+
+    private bool canGrapple;
 
     public AudioSource grappleSrc;
     public AudioClip launchClip;
@@ -28,6 +30,9 @@ public class GrappleHook : MonoBehaviour
 
     public JointDrive newDrive;
 
+    // Chromum wtf there's spaghetti on my screen
+    // -parz
+
 
     public void Awake()
     {
@@ -37,6 +42,8 @@ public class GrappleHook : MonoBehaviour
         joint = gameObject.GetComponent<ConfigurableJoint>();
         lr = gameObject.GetComponent<LineRenderer>();
         newDrive = new JointDrive { maximumForce = 0f };
+
+        canGrapple = true;
     }
 
     public void Update()
@@ -96,12 +103,13 @@ public class GrappleHook : MonoBehaviour
         grappleSrc.clip = reloadClip;
         grappleSrc.Play();
         canGrapple = true;
-        gunUI.toggleGrapple(false);
+        //gunUI.ToggleGrapple(false);
     }
 
     public IEnumerator WaitToGrapple(RaycastHit hitInfo)
     {
-        gunUI.toggleGrapple(true);
+        gunUI.GrappleReset();
+        //gunUI.ToggleGrapple(true);
         grappleSrc.clip = launchClip;
         grappleSrc.Play();
         yield return new WaitForSeconds(0.1f);

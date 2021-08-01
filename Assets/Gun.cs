@@ -19,6 +19,22 @@ public class Gun : MonoBehaviour
     public Transform gunTip;
     public float Damage;
 
+    public bool GrenadeReady { get => grenadeReady; }
+    public float GrenadeCooldownRate { get => grenadeCooldownRate; }
+
+    public GameObject grenadePrefab;
+    public float grenadeLobForce = 20;
+    public float grenadeCooldownTime;
+    float grenadeCooldownRate;
+    float timeTillFire;
+    bool grenadeReady = true;
+    
+    [NonSerialized] public int ammo;
+    public float fireRate;
+    public int maxAmmo;
+    bool reloading;
+
+
     enum Animation
     {
         Idle = 0,
@@ -51,28 +67,23 @@ public class Gun : MonoBehaviour
             if (grenadeReady)
                 GrenadeLaunch();
         }
-        if (grenadeCooldownRate > 0)
-            grenadeCooldownRate -= Time.deltaTime;
-        else if (!grenadeReady)
+        
+        
+        if (grenadeCooldownRate <= 0 && !grenadeReady)
         {
-            gunUI.toggleGrenade(false);
+            //gunUI.ToggleGrenade(false);
             grenadeSrc.clip = grenadeReloadedClip;
             grenadeSrc.Play();
             grenadeReady = true;
             grenadeCooldownRate = 0;
         }
+        else
+        {
+            grenadeCooldownRate = Mathf.MoveTowards(grenadeCooldownRate, 0, Time.deltaTime);
+        }
     }
 
-    public GameObject grenadePrefab;
-    public float grenadeLobForce = 20;
-    bool grenadeReady = true;
-    float grenadeCooldownRate;
-    float timeTillFire;
-    [NonSerialized] public int ammo;
-    public float fireRate;
-    public float grenadeCooldownTime;
-    public int maxAmmo;
-    bool reloading;
+    
     void Fire()
     {
         if (timeTillFire > 0)
@@ -110,7 +121,8 @@ public class Gun : MonoBehaviour
 
     void GrenadeLaunch()
     {
-        gunUI.toggleGrenade(true);
+        //gunUI.ToggleGrenade(true);
+        gunUI.GrenadeReset();
         grenadeReady = false;
         grenadeCooldownRate = grenadeCooldownTime;
         grenadeSrc.clip = grenadeFireClip;
