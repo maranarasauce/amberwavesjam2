@@ -50,8 +50,8 @@ public class Boss : DamageableObject
         //This is the attack array. Set your attack here if you want the boss to use it!!!
         attackStates = new AttackState[]
         {
-            //new FireballAttack(this, 16, grenade)
-            new ShockwaveAttack(this, 30)
+            new FireballAttack(this, 16, grenade),
+            new ShockwaveAttack(this, 15, 250)
         };
         mentalStates.Add(State.Attacking, new AttackingState(this, attackStates));
         SwitchState(State.Idling);
@@ -208,6 +208,11 @@ public class AttackState : MentalState
     float onlyBelowHealth = 0;
     float roundTimer;
     public float roundDelay;
+
+    public virtual string GetAttackName()
+    {
+        return "Base";
+    }
 
     public override void BeginState()
     {

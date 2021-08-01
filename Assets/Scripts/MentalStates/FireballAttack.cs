@@ -18,6 +18,11 @@ public class FireballAttack : AttackState
         grenadeLaunchTimer = grenadeLaunchDelay;
     }
 
+    public override string GetAttackName()
+    {
+        return "Fireball";
+    }
+
     //This gets called whenever the attack timer is up and it switches back to Idle. You don't need this, but it's here if you want it.
     public override void EndState()
     {

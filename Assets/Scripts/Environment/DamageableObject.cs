@@ -28,12 +28,17 @@ public class DamageableObject : MonoBehaviour, IDamageable
 
     public void DoDamage(float damage, bool dontKill)
     {
+        if (dontKill && ((health - damage) <= 0))
+        {
+            return;
+        }
+
         health -= damage;
         lastDamage = damage;
 
         OnDamage?.Invoke();
 
-        if(health <= 0 && !dontKill)
+        if(health <= 0)
         {
             Kill();
         }
@@ -47,7 +52,5 @@ public class DamageableObject : MonoBehaviour, IDamageable
     public void Kill()
     {
         OnKill?.Invoke();
-        
-        Debug.Log("Killed object: " + gameObject.name);
     }
 }

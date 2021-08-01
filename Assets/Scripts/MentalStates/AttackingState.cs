@@ -28,6 +28,7 @@ public class AttackingState : MentalState
     public override void EndState()
     {
         base.EndState();
-        boss.SwitchState(attackStates.RandomEntry<AttackState>());
+        AttackState entry = attackStates.RandomEntry<AttackState>();
+        boss.SwitchState(entry);
     }
 }
