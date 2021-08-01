@@ -2161,16 +2161,19 @@ MonoBehaviour:
   stepSpeed: 5.25
   stepPeak: 10
   footstepSfxs:
-  - {fileID: 8300000, guid: ffa5441258224694690169f4bd95b969, type: 3}
-  - {fileID: 8300000, guid: 5a5fe2a543e35ef44980fcf5ac79551a, type: 3}
-  - {fileID: 8300000, guid: 062aac8f0463d7945a5a16732efbea51, type: 3}
-  - {fileID: 8300000, guid: e331a9e83f5b77e49bd9efba1b2c2fd9, type: 3}
-  - {fileID: 8300000, guid: 8c2c6c300bd8fc441878f426377bec64, type: 3}
-  - {fileID: 8300000, guid: f8e559768bed7ed4680ab0449da7ec3a, type: 3}
+  - {fileID: 8300000, guid: 33723cbe063127c4ca08b7f627760f1e, type: 3}
+  - {fileID: 8300000, guid: f2d112cd27f01be4da1fd1979addfb73, type: 3}
+  - {fileID: 8300000, guid: 19d07bb6bdfbaae43acf30893876bba4, type: 3}
+  - {fileID: 8300000, guid: 7ca101be9f1e036429aba094cd40b711, type: 3}
+  - {fileID: 8300000, guid: e97a8da4003210f41ab64be2f49d795e, type: 3}
+  - {fileID: 8300000, guid: 69ad51b0e53fa6e4d9e6db01c870f7fb, type: 3}
+  - {fileID: 8300000, guid: 374c71596ed63e44ca7a07f15ed1ccd7, type: 3}
   jumpSfxs:
-  - {fileID: 8300000, guid: 304f2bf2228cba94e91cd22803e54bcf, type: 3}
-  - {fileID: 8300000, guid: c86476186f357d44eb470d68a2986520, type: 3}
-  - {fileID: 8300000, guid: f65b8caedf0c89b4c9f6ea1408f5e362, type: 3}
+  - {fileID: 8300000, guid: 371c7554d1d165146a79898daa807134, type: 3}
+  - {fileID: 8300000, guid: efa8d9408cf5dd1469f24a64eabb7b0d, type: 3}
+  - {fileID: 8300000, guid: 09285afe64b606044b4bba58b6cced49, type: 3}
+  - {fileID: 8300000, guid: 7eeb546a06967a149a37ea3e205b518b, type: 3}
+  - {fileID: 8300000, guid: 26ba84cde900f02408eaef46d1af7811, type: 3}
   maxJumpTime: 0.6
   jumpTuckMultiplier: 0.1
   jumpTuckCurve:
