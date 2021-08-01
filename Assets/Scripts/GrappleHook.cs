@@ -33,7 +33,6 @@ public class GrappleHook : MonoBehaviour
     // Chromum wtf there's spaghetti on my screen
     // -parz
 
-
     public void Awake()
     {
         inputManager = InputManager.instance;

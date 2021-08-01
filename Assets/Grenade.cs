@@ -10,6 +10,11 @@ public class Grenade : MonoBehaviour
     bool exploded;
     private void OnCollisionEnter(Collision collision)
     {
+        Explode();
+    }
+
+    public void Explode()
+    {
         if (exploded)
             return;
         exploded = true;

@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3740016277551449485}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17.814188, y: 3.3493142, z: 11.844302}
+  m_LocalPosition: {x: 17.814188, y: 3.3493142, z: 12.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3758616946452099933}
@@ -98,6 +98,7 @@ MonoBehaviour:
   damagePS: {fileID: 8095970129049897404}
   killPS: {fileID: 0}
   health: 5000
+  grenade: {fileID: 935860278282618958, guid: 94f184c8a3ad9a54aa772d9975731292, type: 3}
   dialogueString: {fileID: 0}
   src: {fileID: 532610459981974081}
   attack:
@@ -119,11 +120,11 @@ MonoBehaviour:
     subtitle: Take this!
   hurt:
   - clip: {fileID: 8300000, guid: 6f2ce9bba04ed624fb5f5d0bb44df2f7, type: 3}
-    subtitle: 
+    subtitle: '*grunt*'
   - clip: {fileID: 8300000, guid: bc52c131b45296b40b225ae5541dbb23, type: 3}
-    subtitle: 
+    subtitle: '*grunt*'
   - clip: {fileID: 8300000, guid: d14a51d77c43baa4285e560d302c9412, type: 3}
-    subtitle: 
+    subtitle: '*grunt*'
   - clip: {fileID: 8300000, guid: f6e857ef09f3f444197a8803a7346b32, type: 3}
     subtitle: ...Ouch.
   hurtBIG:
@@ -164,7 +165,8 @@ MonoBehaviour:
     subtitle: It's tea time!
   - clip: {fileID: 8300000, guid: e949c11553e5bf04780136efd71b1401, type: 3}
     subtitle: I'll be seeing you... in hell.
-  collisionRadius: 1.6
+  collisionRadius: 0.25
+  maxDistanceDelta: 0.1
   collisionMask:
     serializedVersion: 2
     m_Bits: 1
