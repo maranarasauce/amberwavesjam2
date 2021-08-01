@@ -210,7 +210,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 535
+    m_Bits: 1559
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -2410,7 +2410,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   cameraTransform: {fileID: 8356578041720834256}
-  stepSpeed: 5.25
+  stepSpeed: 10
   stepPeak: 10
   footstepSfxs:
   - {fileID: 8300000, guid: 33723cbe063127c4ca08b7f627760f1e, type: 3}
@@ -2748,7 +2748,7 @@ MonoBehaviour:
   quadFlare: {fileID: 2474385022517949836}
   gunFireMask:
     serializedVersion: 2
-    m_Bits: 311
+    m_Bits: 1335
   gunTip: {fileID: 8356578042662506201}
   Damage: 1
   grenadePrefab: {fileID: 935860278282618958, guid: 20e960dafd63039419cda7f8f03ed391,

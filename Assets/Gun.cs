@@ -115,7 +115,7 @@ public class Gun : MonoBehaviour
 
         src.Stop();
         src.pitch = UnityEngine.Random.Range(0.97f, 1.02f);
-        src.volume = UnityEngine.Random.Range(0.93f, 1.01f);
+        src.volume = UnityEngine.Random.Range(0.95f, 1.05f) * src.volume;
         src.Play();
     }
 
