@@ -4,34 +4,38 @@ using UnityEngine;
 
 public class FireballAttack : AttackState
 {
+    //This is the constructor. At the minimum you need to have (Boss boss, float time) : base (boss, time)
     public FireballAttack(Boss boss, float time, GameObject fireballPrefab) : base(boss, time)
     {
-        roundDelay = time;
         this.grenadePrefab = fireballPrefab;
     }
 
     GameObject grenadePrefab;
+    //This gets called whenever the state begins. Init timers here and such
     public override void BeginState()
     {
         base.BeginState();
-        height = 10.5f;
         grenadeLaunchTimer = grenadeLaunchDelay;
     }
 
-    float height;
+    //This gets called whenever the attack timer is up and it switches back to Idle. You don't need this, but it's here if you want it.
+    public override void EndState()
+    {
+        base.EndState();
+    }
+
+    float height = 10.5f;
     public float grenadeLaunchDelay = 3f;
     public float grenadeLaunchTimer;
     float lastMove;
+    //Called every frame. Wow!
     public override void Update()
     {
         base.Update();
-
-        //TODO: get distance from player and distance behind boss, find medium between two. if wall is too close, go behind player
+        
+        //This moves the Boss to the midpoint between the player and the wall - it also does some sin movement to keep the player on his toes.
         Vector3 directionTowardsPlayer = (playerCamera.position - boss.transform.position);
         Vector3 wallPoint = Vector3.zero;
-
-        float distanceFromPlayer = directionTowardsPlayer.magnitude;
-        float distanceFromWall = 0;
 
         Vector3 rayTowardsWall = -directionTowardsPlayer;
         rayTowardsWall.y = 0;
@@ -39,7 +43,6 @@ public class FireballAttack : AttackState
         {
             wallPoint = hitInfo.point;
             wallPoint.y = height;
-            distanceFromWall = hitInfo.distance;
         }
 
         Vector3 cameraNoVert = playerCamera.position;
@@ -52,6 +55,7 @@ public class FireballAttack : AttackState
         boss.Move(midpoint);
         lastMove = move;
 
+        //Grenade is launched every 3 seconds, based on the grenadeLaunchDelay variable.
         if (grenadeLaunchTimer <= 0)
             LaunchGrenade(directionTowardsPlayer);
         else grenadeLaunchTimer = Mathf.MoveTowards(grenadeLaunchTimer, 0, Time.deltaTime);
@@ -66,4 +70,6 @@ public class FireballAttack : AttackState
         rb.AddForce(directionTowardsPlayer * 20f, ForceMode.VelocityChange);
         rb.AddTorque(-boss.transform.right * 10, ForceMode.VelocityChange);
     }
+
+    
 }
