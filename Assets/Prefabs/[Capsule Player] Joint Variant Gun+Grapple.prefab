@@ -434,8 +434,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -2, y: 34}
-  m_SizeDelta: {x: 960, y: 540}
+  m_AnchoredPosition: {x: -2, y: 21}
+  m_SizeDelta: {x: 960, y: 566}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8852522584832025356
 CanvasRenderer:
@@ -630,12 +630,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -1024,8 +1024,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 29, y: 34}
-  m_SizeDelta: {x: 960, y: 540}
+  m_AnchoredPosition: {x: 29, y: 21}
+  m_SizeDelta: {x: 960, y: 566}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6037104016268757720
 CanvasRenderer:
@@ -1304,8 +1304,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -35, y: 34}
-  m_SizeDelta: {x: 960, y: 540}
+  m_AnchoredPosition: {x: -35, y: 21}
+  m_SizeDelta: {x: 960, y: 566}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1874048349873916356
 CanvasRenderer:
@@ -1634,7 +1634,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5739515451182944736}
   - component: {fileID: 1741219435530772687}
-  - component: {fileID: 1394416640027052561}
   - component: {fileID: 1817291765511527883}
   m_Layer: 8
   m_Name: Camera (1)
@@ -1666,7 +1665,7 @@ Camera:
   m_GameObject: {fileID: 8229515478275905508}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 4
+  m_ClearFlags: 3
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -1697,17 +1696,9 @@ Camera:
   m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
-  m_OcclusionCulling: 1
+  m_OcclusionCulling: 0
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &1394416640027052561
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8229515478275905508}
-  m_Enabled: 1
 --- !u!82 &1817291765511527883
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2138,7 +2129,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 20535
   grounded: 0
-  maxSpeed: 0.1
+  maxSpeed: 0.15
   moveMaxForce: 100000
   moveSpring: 2500
   moveDamper: 0
@@ -2167,19 +2158,22 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   cameraTransform: {fileID: 8356578041720834256}
-  stepSpeed: 3.5
+  stepSpeed: 5.25
   stepPeak: 10
   footstepSfxs:
-  - {fileID: 8300000, guid: ffa5441258224694690169f4bd95b969, type: 3}
-  - {fileID: 8300000, guid: 5a5fe2a543e35ef44980fcf5ac79551a, type: 3}
-  - {fileID: 8300000, guid: 062aac8f0463d7945a5a16732efbea51, type: 3}
-  - {fileID: 8300000, guid: e331a9e83f5b77e49bd9efba1b2c2fd9, type: 3}
-  - {fileID: 8300000, guid: 8c2c6c300bd8fc441878f426377bec64, type: 3}
-  - {fileID: 8300000, guid: f8e559768bed7ed4680ab0449da7ec3a, type: 3}
+  - {fileID: 8300000, guid: 33723cbe063127c4ca08b7f627760f1e, type: 3}
+  - {fileID: 8300000, guid: f2d112cd27f01be4da1fd1979addfb73, type: 3}
+  - {fileID: 8300000, guid: 19d07bb6bdfbaae43acf30893876bba4, type: 3}
+  - {fileID: 8300000, guid: 7ca101be9f1e036429aba094cd40b711, type: 3}
+  - {fileID: 8300000, guid: e97a8da4003210f41ab64be2f49d795e, type: 3}
+  - {fileID: 8300000, guid: 69ad51b0e53fa6e4d9e6db01c870f7fb, type: 3}
+  - {fileID: 8300000, guid: 374c71596ed63e44ca7a07f15ed1ccd7, type: 3}
   jumpSfxs:
-  - {fileID: 8300000, guid: 304f2bf2228cba94e91cd22803e54bcf, type: 3}
-  - {fileID: 8300000, guid: c86476186f357d44eb470d68a2986520, type: 3}
-  - {fileID: 8300000, guid: f65b8caedf0c89b4c9f6ea1408f5e362, type: 3}
+  - {fileID: 8300000, guid: 371c7554d1d165146a79898daa807134, type: 3}
+  - {fileID: 8300000, guid: efa8d9408cf5dd1469f24a64eabb7b0d, type: 3}
+  - {fileID: 8300000, guid: 09285afe64b606044b4bba58b6cced49, type: 3}
+  - {fileID: 8300000, guid: 7eeb546a06967a149a37ea3e205b518b, type: 3}
+  - {fileID: 8300000, guid: 26ba84cde900f02408eaef46d1af7811, type: 3}
   maxJumpTime: 0.6
   jumpTuckMultiplier: 0.1
   jumpTuckCurve:
@@ -2299,7 +2293,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0, y: 0, z: -10.02}
+  m_ConnectedAnchor: {x: 14.6, y: 18, z: 5}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 2
