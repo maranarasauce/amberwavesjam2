@@ -11,14 +11,14 @@ public class IdleState : MentalState
     public override void BeginState()
     {
         circleCenter = boss.transform.position;
-        timeUntilSwitch = UnityEngine.Random.Range(1f, 5f);
+        roundTimer = UnityEngine.Random.Range(5f, 10f);
     }
 
-    float initial_TimeUntilSwitch;
-    float timeUntilSwitch;
+    float roundTimerDelay;
+    float roundTimer;
     Vector3 circleCenter;
-    float circleFrequency = 1f;
-    float circleRadius = 2;
+    float circleFrequency = 1.75f;
+    float circleRadius = 4f;
     public override void Update()
     {
         base.Update();
@@ -26,5 +26,15 @@ public class IdleState : MentalState
         Vector3 newPos = new Vector3(Mathf.Cos(angle) * circleRadius, 0, Mathf.Sin(angle) * circleRadius);
         newPos += circleCenter;
         boss.Move(newPos, false);
+
+        if (roundTimer <= 0)
+            EndState();
+        else roundTimer = Mathf.MoveTowards(roundTimer, 0, Time.deltaTime);
+    }
+
+    public override void EndState()
+    {
+        base.EndState();
+        boss.SwitchState(Boss.State.Attacking);
     }
 }
