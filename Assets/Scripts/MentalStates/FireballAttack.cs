@@ -18,6 +18,11 @@ public class FireballAttack : AttackState
         grenadeLaunchTimer = grenadeLaunchDelay;
     }
 
+    public override string GetAttackName()
+    {
+        return "Fireball";
+    }
+
     //This gets called whenever the attack timer is up and it switches back to Idle. You don't need this, but it's here if you want it.
     public override void EndState()
     {
@@ -65,7 +70,8 @@ public class FireballAttack : AttackState
     {
         grenadeLaunchTimer = grenadeLaunchDelay;
         Vector3 directionTowardsPlayer = playerVector.normalized;
-        GameObject grenadeObject = GameObject.Instantiate(grenadePrefab, boss.transform.position + (directionTowardsPlayer * 1.3f), Quaternion.Euler(directionTowardsPlayer));
+        directionTowardsPlayer.y = -0.6f;
+        GameObject grenadeObject = GameObject.Instantiate(grenadePrefab, boss.transform.position + (directionTowardsPlayer * 2f), Quaternion.Euler(directionTowardsPlayer));
         Rigidbody rb = grenadeObject.GetComponent<Rigidbody>();
         rb.AddForce(directionTowardsPlayer * 20f, ForceMode.VelocityChange);
         rb.AddTorque(-boss.transform.right * 10, ForceMode.VelocityChange);

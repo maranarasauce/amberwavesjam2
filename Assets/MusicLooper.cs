@@ -9,7 +9,8 @@ public class MusicLooper : MonoBehaviour
     {
         if (instance != null)
             Destroy(gameObject);
-        DontDestroyOnLoad(gameObject);
+
         instance = this;
+        DontDestroyOnLoad(gameObject);
     }
 }
