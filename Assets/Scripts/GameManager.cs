@@ -54,6 +54,9 @@ public class GameManager : MonoBehaviour
     }
 
     #region Scene Loading logic
+
+    // Some of this feels stupid
+    // - parz
     public IEnumerator LoadGame()
     {
         LoadFade();
@@ -81,6 +84,9 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator SceneLoadProgress(Scene nextActiveScene)
     {
+        if (loadingScreen.isActiveAndEnabled)
+            loadingScreen.ShowLoadingAnim(true);
+
         for (int i = 0; i < sceneLoading.Count; i++)
         {
             while (!sceneLoading[i].isDone)
@@ -89,8 +95,11 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if(loadingScreen.isActiveAndEnabled)
+        if (loadingScreen.isActiveAndEnabled)
+        {
+            loadingScreen.ShowLoadingAnim(false);
             loadingScreen.FadeOut(); // fade out to next scene after loading is complete
+        }
 
         SceneManager.SetActiveScene(nextActiveScene);
      

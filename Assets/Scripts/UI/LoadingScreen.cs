@@ -7,7 +7,10 @@ public class LoadingScreen : MonoBehaviour
 {
     public float fadeTime = 1f;
     public Image background;
+    public GameObject text;
 
+    // Some of this also feels stupid
+    // - parz
 
     public void FadeIn()
     {
@@ -34,7 +37,6 @@ public class LoadingScreen : MonoBehaviour
             yield return null;
         }
 
-
         //for (float t = 0f; t < 1f; t += Time.deltaTime / fadeTime)
         //{
         //    c.a = Mathf.Lerp(c.a, goal, t);
@@ -47,6 +49,11 @@ public class LoadingScreen : MonoBehaviour
             gameObject.SetActive(false);
     }
     
+    public void ShowLoadingAnim(bool b)
+    {
+        text.SetActive(b);
+    }
+
     private void SetBG(float x)
     {
         var c = background.color;
