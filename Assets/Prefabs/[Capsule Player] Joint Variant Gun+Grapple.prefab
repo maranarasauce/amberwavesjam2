@@ -361,7 +361,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -254.70001, y: 37.299988}
+  m_AnchoredPosition: {x: -254.69995, y: 37.30005}
   m_SizeDelta: {x: 30, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3132578583736982774
@@ -560,7 +560,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -3.4000244, y: -0.2000122}
+  m_AnchoredPosition: {x: -3.4001465, y: -0.19995117}
   m_SizeDelta: {x: 112.529175, y: 50.083786}
   m_Pivot: {x: 1, y: 0}
 --- !u!222 &8317214129713950680
@@ -687,7 +687,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 1
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -1706,7 +1706,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -180.6, y: 37.3}
+  m_AnchoredPosition: {x: -180.6001, y: 37.30005}
   m_SizeDelta: {x: 31, y: 23}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2892322064103080127
@@ -2545,7 +2545,7 @@ ConfigurableJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 14.6, y: 18, z: 5}
+  m_ConnectedAnchor: {x: 0, y: 0, z: -10.02}
   serializedVersion: 2
   m_SecondaryAxis: {x: 0, y: 1, z: 0}
   m_XMotion: 2
@@ -2754,8 +2754,8 @@ MonoBehaviour:
   grenadePrefab: {fileID: 935860278282618958, guid: 20e960dafd63039419cda7f8f03ed391,
     type: 3}
   grenadeLobForce: 20
-  fireRate: 0.08333335
   grenadeCooldownTime: 3
+  fireRate: 0.08333335
   maxAmmo: 23
 --- !u!120 &8057433736513673258
 LineRenderer:
@@ -2866,7 +2866,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunUI: {fileID: 7289339461948513142}
-  canGrapple: 1
   grappleSrc: {fileID: 8733210093356984594}
   launchClip: {fileID: 8300000, guid: 80a974cfe6015a045a249413b362bc17, type: 3}
   pullClip: {fileID: 8300000, guid: 978df7708cfab1440aca6ff35f358ccf, type: 3}
@@ -3062,7 +3061,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 212.6, y: 57.2}
+  m_AnchoredPosition: {x: 212.6001, y: 57.19995}
   m_SizeDelta: {x: 426, y: 115}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7389260900702066151
