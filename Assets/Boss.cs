@@ -29,6 +29,8 @@ public class Boss : DamageableObject
     public GameObject grenade;
     public TextMeshProUGUI dialogueString;
     public AudioSource src;
+    [SerializeField] SkinnedMeshRenderer skin;
+    Transform player;
 
     [Header("Dialogue Entries")]
     [SerializeField] Dialogue[] attack;
@@ -44,10 +46,12 @@ public class Boss : DamageableObject
 
         base.OnDamage += Boss_OnDamage;
         mentalStates.Add(State.Idling, new IdleState(this));
+        player = Camera.main.transform;
         //This is the attack array. Set your attack here if you want the boss to use it!!!
         attackStates = new AttackState[]
         {
-            new FireballAttack(this, 16, grenade)
+            //new FireballAttack(this, 16, grenade)
+            new ShockwaveAttack(this, 30)
         };
         mentalStates.Add(State.Attacking, new AttackingState(this, attackStates));
         SwitchState(State.Idling);
@@ -65,6 +69,12 @@ public class Boss : DamageableObject
         }
 
         currentState.Update();
+
+        skin.SetBlendShapeWeight(0, Mathf.Sin(Time.time * 10) * 100);
+        skin.rootBone.transform.LookAt(player);
+        Vector3 rootBoneRot = skin.rootBone.rotation.eulerAngles;
+        rootBoneRot.x = 0;
+        skin.rootBone.rotation = Quaternion.Euler(rootBoneRot);
     }
 
     #region Damage

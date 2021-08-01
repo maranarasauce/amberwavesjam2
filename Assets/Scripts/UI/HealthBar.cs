@@ -8,6 +8,7 @@ public class HealthBar : MonoBehaviour
     public GameObject damagableObject;
     private IDamageable idam;
     public Slider slider;
+    public bool canvasSpace;
 
 
     public void Start()
@@ -23,6 +24,7 @@ public class HealthBar : MonoBehaviour
     {
         slider.value = idam.Health;
 
-        gameObject.transform.eulerAngles = Camera.main.transform.eulerAngles;
+        if (!canvasSpace)
+            gameObject.transform.eulerAngles = Camera.main.transform.eulerAngles;
     }
 }

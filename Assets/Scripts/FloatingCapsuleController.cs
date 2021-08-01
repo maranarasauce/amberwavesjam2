@@ -16,10 +16,11 @@ public class FloatingCapsuleController : MonoBehaviour
     [NonSerialized] public float rideHeightFloor;
     public float jumpForce;
     public LayerMask rideMask;
-    Rigidbody rb;
+    [NonSerialized] public Rigidbody rb;
     ConfigurableJoint jt;
 
     public bool grounded;
+    public static FloatingCapsuleController instance;
 
     public float maxSpeed;
     public float moveMaxForce;
@@ -38,6 +39,7 @@ public class FloatingCapsuleController : MonoBehaviour
     private void Start()
     {
         input = InputManager.instance.input;
+        instance = this;
 
         footstepSrc = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();

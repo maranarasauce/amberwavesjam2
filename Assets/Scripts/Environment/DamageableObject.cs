@@ -26,17 +26,22 @@ public class DamageableObject : MonoBehaviour, IDamageable
             OnKill   += killPS.Play;
     }
 
-    public void DoDamage(float damage)
+    public void DoDamage(float damage, bool dontKill)
     {
         health -= damage;
         lastDamage = damage;
 
         OnDamage?.Invoke();
 
-        if(health <= 0)
+        if(health <= 0 && !dontKill)
         {
             Kill();
         }
+    }
+
+    public void DoDamage(float damage)
+    {
+        DoDamage(damage, false);
     }
 
     public void Kill()
