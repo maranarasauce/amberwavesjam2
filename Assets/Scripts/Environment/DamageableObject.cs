@@ -19,8 +19,11 @@ public class DamageableObject : MonoBehaviour, IDamageable
 
     protected virtual void Start()
     {
-        OnDamage += damagePS.Play;
-        OnKill   += killPS.Play;
+        if(damagePS != null)
+            OnDamage += damagePS.Play;
+       
+        if(killPS != null)
+            OnKill   += killPS.Play;
     }
 
     public void DoDamage(float damage)

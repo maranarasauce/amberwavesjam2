@@ -6,19 +6,15 @@ public class SkyboxController : MonoBehaviour
 {
     public int rotationSpeed = 5;
 
-    private Material skybox;
-
-    private void Start()
-    {
-        skybox = RenderSettings.skybox;
-    }
-
     private void Update()
     {
-        var currentRot = skybox.GetFloat("_Rotation");
+        if (RenderSettings.skybox != null)
+        {
+            var currentRot = RenderSettings.skybox.GetFloat("_Rotation");
 
-        currentRot = Mathf.Repeat(currentRot + rotationSpeed * Time.deltaTime, 360);
+            currentRot = Mathf.Repeat(currentRot + rotationSpeed * Time.deltaTime, 360);
 
-        skybox.SetFloat("_Rotation", currentRot);
+            RenderSettings.skybox.SetFloat("_Rotation", currentRot);
+        }
     }
 }

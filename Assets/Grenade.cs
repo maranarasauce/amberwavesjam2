@@ -6,9 +6,17 @@ public class Grenade : MonoBehaviour
 {
     public float blastRadius;
     public float damage;
+    public float playerDmgReduction;
+
     public GameObject explosionParticle;
     bool exploded;
+
     private void OnCollisionEnter(Collision collision)
+    {
+        Explode();
+    }
+
+    public void Explode()
     {
         if (exploded)
             return;
@@ -22,11 +30,23 @@ public class Grenade : MonoBehaviour
             {
                 rb.AddForce((transform.position - rb.position).normalized * -1000, ForceMode.Impulse);
             }
-            DamageableObject desc = col.gameObject.GetComponent<DamageableObject>();
-            if (desc == null)
-                continue;
-            desc.DoDamage(damage);
+
+            if (col.gameObject.TryGetComponent<DamageableObject>(out var desc))
+            {
+                if (desc == null)
+                    continue;
+
+                var dmg = damage;
+
+                // @Incomplete: 
+                //if (TryGetComponent<PlayerHealth>(out _))
+                //    dmg *= playerDmgReduction;
+
+                desc.DoDamage(dmg);
+            }
+
         }
         Destroy(gameObject);
     }
+
 }
