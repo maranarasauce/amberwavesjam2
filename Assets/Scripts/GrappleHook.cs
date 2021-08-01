@@ -29,7 +29,7 @@ public class GrappleHook : MonoBehaviour
     public JointDrive newDrive;
 
 
-    public void Start()
+    public void Awake()
     {
         inputManager = InputManager.instance;
         playerRB = gameObject.GetComponent<Rigidbody>();
