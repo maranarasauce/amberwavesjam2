@@ -6,12 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class SceneRestart : MonoBehaviour
 {
-    public AudioSource tauntSrc;
-    public AudioClip[] tauntClips;
+    public Boss boss;
     public void PlayTaunt()
     {
-        tauntSrc.clip = tauntClips.GetRandomValue<AudioClip>();
-        tauntSrc.Play();
+        boss.Speak(boss.taunt);
     }
 
     public void Restart()
@@ -24,6 +22,6 @@ public static class ArrayExtension
 {
     public static T GetRandomValue<T>(this T[] array)
     {
-        return array[UnityEngine.Random.Range(0, array.Length - 1)];
+        return array[UnityEngine.Random.Range(0, array.Length)];
     }
 }
