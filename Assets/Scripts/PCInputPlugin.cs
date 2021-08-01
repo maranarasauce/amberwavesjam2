@@ -28,8 +28,6 @@ namespace Maranara.InputShell
         {
             manager = InputManager.instance;
             input = manager.input;
-
-            
         }
 
         public float Sensitivity

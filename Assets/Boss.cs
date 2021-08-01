@@ -9,20 +9,12 @@ public class Boss : DamageableObject
     public enum State
     {
         Idling,
-        Preparing,
         Attacking,
-        Recovering,
         Dying
     }
 
     Dictionary<State, MentalState> mentalStates = new Dictionary<State, MentalState>();
-
-    public enum AttackState
-    {
-        Fireball,
-        Uzi,
-        Canonball
-    }
+    AttackState[] attackStates;
 
     [Serializable]
     public class Dialogue
@@ -34,6 +26,7 @@ public class Boss : DamageableObject
     AttackState currentAttack;
     MentalState currentState;
 
+    public GameObject grenade;
     public TextMeshProUGUI dialogueString;
     public AudioSource src;
 
@@ -48,9 +41,17 @@ public class Boss : DamageableObject
     protected override void Start()
     {
         base.Start();
+
         base.OnDamage += Boss_OnDamage;
         mentalStates.Add(State.Idling, new IdleState(this));
+        //This is the attack array. Set your attack here if you want the boss to use it!!!
+        attackStates = new AttackState[]
+        {
+            new FireballAttack(this, 16, grenade)
+        };
+        mentalStates.Add(State.Attacking, new AttackingState(this, attackStates));
         SwitchState(State.Idling);
+        Speak(intro);
     }
 
     public void Update()
@@ -74,7 +75,7 @@ public class Boss : DamageableObject
             RandomSpeak(hurtBIG, 2);
         } else
         {
-            RandomSpeak(hurt, 5);
+            RandomSpeak(hurt, 15);
         }
     }
 
@@ -109,15 +110,13 @@ public class Boss : DamageableObject
     #endregion
 
     #region States
-    void SwitchState(MentalState state)
+    public void SwitchState(MentalState state)
     {
-        if (currentState != null)
-            currentState.EndState();
         currentState = state;
         currentState.BeginState();
     }
 
-    void SwitchState(State state)
+    public void SwitchState(State state)
     {
         SwitchState(mentalStates[state]);
     }
@@ -126,19 +125,21 @@ public class Boss : DamageableObject
     #region "Physics"
     [Header("'Physics'")]
     public float collisionRadius;
+    public float maxDistanceDelta = 3;
     public LayerMask collisionMask;
     public void Move(Vector3 position)
     {
-        Vector3 direction = (transform.position - position).normalized;
-        Vector3 origin = transform.position + (-direction * collisionRadius);
-        Debug.DrawLine(origin, position);
-        if (Physics.Linecast(origin, position, out RaycastHit hitInfo, collisionMask))
+        Vector3 direction = (position - transform.position);
+        Vector3 origin = transform.position;
+        float distance = (collisionRadius + 2f);
+        Debug.DrawRay(origin, direction.normalized);
+        if (Physics.Raycast(origin, direction.normalized, out RaycastHit hitInfo, distance, collisionMask))
         {
-            Vector3 calcPoint = hitInfo.point + (-hitInfo.normal * collisionRadius);
-            Vector3.Lerp(transform.position, calcPoint, 0.5f);
+            Vector3 calcPoint = hitInfo.point + (hitInfo.normal * collisionRadius * 2);
+            transform.position = Vector3.MoveTowards(transform.position, calcPoint, maxDistanceDelta);
         } else
         {
-            transform.position = position;
+            transform.position = Vector3.MoveTowards(transform.position, position, maxDistanceDelta);
         }
     }
 
@@ -176,5 +177,45 @@ public class MentalState
     public virtual void EndState()
     {
 
+    }
+}
+
+public class AttackState : MentalState
+{
+    public AttackState(Boss boss, float time) : base(boss)
+    {
+        roundDelay = time;
+    }
+
+    public AttackState(Boss boss, float time, float healthCeiling) : base(boss)
+    {
+        roundDelay = time;
+        onlyBelowHealth = healthCeiling;
+    }
+
+    public float TimeLeft { get => roundTimer; }
+    public float HealthCeiling { get => onlyBelowHealth; }
+    float onlyBelowHealth = 0;
+    float roundTimer;
+    public float roundDelay;
+
+    public override void BeginState()
+    {
+        base.BeginState();
+        roundTimer = roundDelay;
+    }
+
+    public override void Update()
+    {
+        base.Update();
+        if (roundTimer <= 0)
+            EndState();
+        else roundTimer = Mathf.MoveTowards(roundTimer, 0, Time.deltaTime);
+    }
+
+    public override void EndState()
+    {
+        base.EndState();
+        boss.SwitchState(Boss.State.Idling);
     }
 }

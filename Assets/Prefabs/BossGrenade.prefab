@@ -58,7 +58,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b96f14ea4f284bf44b27e5a5062eb3d7, type: 2}
+  - {fileID: 2100000, guid: ee006d4760e94f34989125cd4884b68f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 4600900494107480147}
   - component: {fileID: 7709817946237578485}
   m_Layer: 0
-  m_Name: GrenadeCube
+  m_Name: BossGrenade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

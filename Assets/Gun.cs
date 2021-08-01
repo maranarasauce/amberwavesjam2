@@ -110,6 +110,10 @@ public class Gun : MonoBehaviour
             {
                 objectHit.DoDamage(Damage);
             }
+            if (hitInfo.transform.TryGetComponent<Grenade>(out Grenade grenadeHit))
+            {
+                grenadeHit.Explode();
+            }
         }
 
 
@@ -128,7 +132,6 @@ public class Gun : MonoBehaviour
         grenadeSrc.clip = grenadeFireClip;
         grenadeSrc.Play();
         GameObject grenadeObject = GameObject.Instantiate(grenadePrefab, playCam.position + (playCam.forward * 1.1f), playCam.rotation);
-        grenadePrefab.transform.position = transform.position;
         Rigidbody rb = grenadeObject.GetComponent<Rigidbody>();
         rb.AddForce(playCam.forward * 20f, ForceMode.VelocityChange);
         rb.AddTorque(-playCam.right * 10, ForceMode.VelocityChange);
