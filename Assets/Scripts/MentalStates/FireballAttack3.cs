@@ -8,11 +8,16 @@ public class WallClose : AttackState
 
     GameObject[] walls;
     //This is the constructor. At the minimum you need to have (Boss boss, float time) : base (boss, time)
-    public WallClose(Boss boss, float time) : base(boss, time)
+    public WallClose(Boss boss, float time, ScreenShake shake) : base(boss, time)
     {
+        moveSound = Resources.Load<AudioClip>("SFX/wallMove");
         walls = GameObject.FindGameObjectsWithTag("Wall");
+        this.shake = shake;
     }
 
+    bool isShaking;
+    ScreenShake shake;
+    AudioClip moveSound;
     GameObject grenadePrefab;
     //This gets called whenever the state begins. Init timers here and such
     public override void BeginState()
@@ -20,6 +25,8 @@ public class WallClose : AttackState
         base.BeginState();
         wallTimer = wallTimerDelay;
         grenadeLaunchTimer = grenadeLaunchDelay;
+        boss.PlaySFX(moveSound, 0.34f, false);
+        isShaking = true;
     }
 
     public override string GetAttackName()
@@ -42,6 +49,12 @@ public class WallClose : AttackState
     {
         base.Update();
         
+        if (isShaking)
+        {
+            shake.ShakeScreen(1.4f, 10f);
+            isShaking = false;
+        }
+
         //This moves the Boss to the midpoint between the player and the wall - it also does some sin movement to keep the player on his toes.
         Vector3 directionTowardsPlayer = (playerCamera.position - boss.transform.position);
         Vector3 wallPoint = Vector3.zero;
@@ -64,15 +77,13 @@ public class WallClose : AttackState
         boss.Move(midpoint);
         lastMove = move;
 
-        //Grenade is launched every 3 seconds, based on the grenadeLaunchDelay variable.
-        if (grenadeLaunchTimer <= 0)
-            moveWalls();
-        else grenadeLaunchTimer = Mathf.MoveTowards(grenadeLaunchTimer, 0, Time.deltaTime);
+        // doo doo ca ca
+        MoveWalls();
     }
 
     public float wallTimerDelay = 5f;
     public float wallTimer;
-    void moveWalls()
+    void MoveWalls()
     {
         if (wallTimer > 0)
         {
@@ -89,8 +100,8 @@ public class WallClose : AttackState
         } else
         {
             isClosed = isClosed ? false : true;
-            grenadeLaunchTimer = grenadeLaunchDelay;
             wallTimer = wallTimerDelay;
+            EndState();
         }
     }
 }

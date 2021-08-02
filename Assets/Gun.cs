@@ -16,6 +16,8 @@ public class Gun : MonoBehaviour
     public Transform quadFlare;
     public LayerMask gunFireMask;
 
+    public ScreenShake shake;
+
     public Transform gunTip;
     public float Damage;
 
@@ -86,6 +88,8 @@ public class Gun : MonoBehaviour
     
     void Fire()
     {
+        shake.ShakeScreen(0.05f, 0.1f);
+
         if (timeTillFire > 0)
         {
             timeTillFire -= Time.deltaTime;
@@ -125,6 +129,7 @@ public class Gun : MonoBehaviour
 
     void GrenadeLaunch()
     {
+        shake.ShakeScreen(3f, 0.1f);
         //gunUI.ToggleGrenade(true);
         gunUI.GrenadeReset();
         grenadeReady = false;

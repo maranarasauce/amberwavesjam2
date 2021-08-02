@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class FloatingCapsuleController : MonoBehaviour
 {
+    public ScreenShake shake;
     public float ridecastLength;
     float realRidecastLength;
     float ridecastModifier;
@@ -270,11 +271,13 @@ public class FloatingCapsuleController : MonoBehaviour
     float crashTimer;
     public void OnCollisionEnter(Collision collision)
     {
+
         if (crashTimer > 0)
             return;
 
         if (Mathf.Abs(rb.velocity.y) > minVelocityToCrash)
         {
+            shake.ShakeScreen(1f * (rb.velocity.magnitude / 2), 0.3f);
             crashTimer = crashTimeDelay;
             Collider[] cols = Physics.OverlapSphere(transform.position, 1.2f);
             foreach (Collider col in cols)

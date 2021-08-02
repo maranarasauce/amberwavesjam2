@@ -4,9 +4,21 @@ using UnityEngine;
 
 public class PlayerHealth : DamageableObject
 {
+    ScreenShake shake;
+    private void Start()
+    {
+        shake = gameObject.GetComponent<ScreenShake>();
+    }
+
     private void OnEnable()
     {
+        OnDamage += PlayerHealth_OnDamage;
         OnKill += PlayerHealth_OnKill;
+    }
+
+    private void PlayerHealth_OnDamage()
+    {
+        shake.ShakeScreen(1f, 0.2f);
     }
 
     private void OnDisable()

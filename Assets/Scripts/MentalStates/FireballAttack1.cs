@@ -5,10 +5,11 @@ using UnityEngine;
 public class ShockwaveAttack : AttackState
 {
     //This is the constructor. At the minimum you need to have (Boss boss, float time) : base (boss, time)
-    public ShockwaveAttack(Boss boss, float time, float healthCeiling) : base(boss, time, healthCeiling)
+    public ShockwaveAttack(Boss boss, float time, float healthCeiling, ScreenShake shake) : base(boss, time, healthCeiling)
     {
         impactSound = Resources.Load<AudioClip>("SFX/shockwaveImpact");
         riseSound = Resources.Load<AudioClip>("SFX/shockwaveRise");
+        this.shake = shake;
     }
 
     //This gets called whenever the state begins. Init timers here and such
@@ -21,6 +22,7 @@ public class ShockwaveAttack : AttackState
         originalDelta = boss.maxDistanceDelta;
     }
 
+    ScreenShake shake;
     AudioClip impactSound;
     AudioClip riseSound;
     AudioClip fallSound;
@@ -70,12 +72,15 @@ public class ShockwaveAttack : AttackState
         //Slam down and land
         if (10f > TimeLeft && TimeLeft > 4f && !landed)
         {
-            boss.maxDistanceDelta = 0.3f;
+            boss.maxDistanceDelta = 0.43f;
 
             if (Physics.Raycast(boss.transform.position, -boss.transform.up, boss.collisionRadius + 1, boss.collisionMask))
             {
+                shake.ShakeScreen(1f, 0.2f);
                 boss.PlaySFX(impactSound, 0.5f, false);
                 landPoint = boss.transform.position;
+
+                
 
                 Collider[] cols = Physics.OverlapSphere(boss.transform.position, 5f, boss.collisionMask);
                 foreach (Collider col in cols)
@@ -90,7 +95,7 @@ public class ShockwaveAttack : AttackState
             }
                 
 
-            boss.Move(Vector3.down * 50, true);
+            boss.Move(Vector3.down * 150, true);
         }
 
         #region DidntLand
@@ -115,6 +120,14 @@ public class ShockwaveAttack : AttackState
         if (landed)
         {
             float delta = landedTime - TimeLeft;
+            
+            if (delta >= 0.8f && delta <= 2.7f)
+            {
+                shake.ShakeScreen(0.5f, 10f);
+            }
+
+            if (delta >= 2.75f && delta <= 2.85f)
+                shake.ShakeScreen(4f, 0.5f);
 
             if (delta > 2.75f)
             {
