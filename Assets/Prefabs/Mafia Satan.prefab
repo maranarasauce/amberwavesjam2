@@ -757,7 +757,8 @@ MonoBehaviour:
   killPS: {fileID: 0}
   health: 500
   grenade: {fileID: 935860278282618958, guid: 94f184c8a3ad9a54aa772d9975731292, type: 3}
-  bigGrenade: {fileID: 0}
+  bigGrenade: {fileID: 935860278282618958, guid: 67167a7df7a7502449f2896f28eaba9e,
+    type: 3}
   dialogueString: {fileID: 0}
   src: {fileID: 532610459981974081}
   fxSrc: {fileID: 3462989418040746420}

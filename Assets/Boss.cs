@@ -55,7 +55,9 @@ public class Boss : DamageableObject
             new FireballAttack(this, 16, grenade),
             new LargeFireballAttack(this, 16, bigGrenade),
             new ShockwaveAttack(this, 15, 250),
-            new JostleAttack(this, 5, 250)
+            new JostleAttack(this, 5, 250),
+            new WallClose(this, 9),
+            new ShockwaveAttack(this, 15, 250)
         };
         mentalStates.Add(State.Attacking, new AttackingState(this, attackStates));
         SwitchState(State.Idling);
