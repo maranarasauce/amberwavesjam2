@@ -798,8 +798,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4621895524926999690, guid: be69f29ee541c0149abfa92872a583d1,
         type: 3}
+      propertyPath: shake
+      value: 
+      objectReference: {fileID: 6487045727668813123}
+    - target: {fileID: 4621895524926999690, guid: be69f29ee541c0149abfa92872a583d1,
+        type: 3}
       propertyPath: crashTimeDelay
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4621895524926999690, guid: be69f29ee541c0149abfa92872a583d1,
         type: 3}

@@ -8,7 +8,7 @@ public class WallClose : AttackState
 
     GameObject[] walls;
     //This is the constructor. At the minimum you need to have (Boss boss, float time) : base (boss, time)
-    public WallClose(Boss boss, float time, ScreenShake shake) : base(boss, time)
+    public WallClose(Boss boss, float time, float healthCeiling, ScreenShake shake) : base(boss, time, healthCeiling)
     {
         moveSound = Resources.Load<AudioClip>("SFX/wallMove");
         walls = GameObject.FindGameObjectsWithTag("Wall");

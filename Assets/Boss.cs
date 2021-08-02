@@ -26,7 +26,7 @@ public class Boss : DamageableObject
     AttackState currentAttack;
     MentalState currentState;
 
-    public ScreenShake shake;
+    ScreenShake shake;
     public GameObject grenade;
     public GameObject bigGrenade;
     public TextMeshProUGUI dialogueString;
@@ -50,6 +50,7 @@ public class Boss : DamageableObject
         base.OnDamage += Boss_OnDamage;
         mentalStates.Add(State.Idling, new IdleState(this));
         player = Camera.main.transform;
+        shake = FloatingCapsuleController.instance.GetComponent<ScreenShake>();
 
         //This is the attack array. Set your attack here if you want the boss to use it!!!
         List<AttackStateWeight> attackIndex = new List<AttackStateWeight>()
@@ -57,9 +58,9 @@ public class Boss : DamageableObject
             //new AttackStateWeight( Attack Constructor, Weight of 0.0 to 1.0),
             new AttackStateWeight( 0.9f , new FireballAttack(this, 16, 0f, grenade)),
             new AttackStateWeight( 0.6f, new LargeFireballAttack(this, 16, 250f, bigGrenade)),
-            new AttackStateWeight( 0.3f, new ShockwaveAttack(this, 15, 250f)),
+            new AttackStateWeight( 0.3f, new ShockwaveAttack(this, 15, 250f, shake)),
             new AttackStateWeight( 0.4f, new JostleAttack(this, 5, 250f)),
-            new AttackStateWeight( 0.5f, new WallClose(this, 9, 0f)),
+            new AttackStateWeight( 0.5f, new WallClose(this, 9, 400f, shake)),
             new AttackStateWeight( 0.8f, new PigeonAttack(this, 4f, 0f)),
             new AttackStateWeight( 0.01f, new FartAttack(this, 11f, 0f))
         };

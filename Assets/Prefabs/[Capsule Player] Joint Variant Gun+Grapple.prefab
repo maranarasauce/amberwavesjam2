@@ -2510,7 +2510,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8356578042095652410}
-  m_Material: {fileID: 13400000, guid: 5082c20d5e686e04b9cd521e99239722, type: 2}
+  m_Material: {fileID: 13400000, guid: 2147bcce564f3ed4983b127aa4a28f18, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.07
@@ -2529,9 +2529,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a48ef6e281cbdf43bdcec6f29894857, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shake: {fileID: 0}
   ridecastLength: 1.1
   defaultRideHeight: 1
-  jumpForce: 360
+  jumpForce: 500
   rideMask:
     serializedVersion: 2
     m_Bits: 20535
@@ -2673,6 +2674,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  minVelocityToCrash: 0
+  crashTimeDelay: 0
 --- !u!54 &2284868923520665101
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2747,7 +2750,7 @@ ConfigurableJoint:
     maximumForce: 3.4028233e+38
   m_YDrive:
     serializedVersion: 3
-    positionSpring: 300
+    positionSpring: 1000
     positionDamper: 40
     maximumForce: 3.4028233e+38
   m_ZDrive:
@@ -2904,6 +2907,7 @@ MonoBehaviour:
   gunFireMask:
     serializedVersion: 2
     m_Bits: 1335
+  shake: {fileID: 0}
   gunTip: {fileID: 8356578042662506201}
   Damage: 1
   grenadePrefab: {fileID: 935860278282618958, guid: 20e960dafd63039419cda7f8f03ed391,
@@ -3021,6 +3025,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gunUI: {fileID: 7289339461948513142}
+  shake: {fileID: 0}
   grappleSrc: {fileID: 8733210093356984594}
   launchClip: {fileID: 8300000, guid: 80a974cfe6015a045a249413b362bc17, type: 3}
   pullClip: {fileID: 8300000, guid: 978df7708cfab1440aca6ff35f358ccf, type: 3}
