@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class FloatingCapsuleController : MonoBehaviour
 {
+    public ScreenShake shake;
     public float ridecastLength;
     float realRidecastLength;
     float ridecastModifier;
@@ -16,10 +17,11 @@ public class FloatingCapsuleController : MonoBehaviour
     [NonSerialized] public float rideHeightFloor;
     public float jumpForce;
     public LayerMask rideMask;
-    Rigidbody rb;
+    [NonSerialized] public Rigidbody rb;
     ConfigurableJoint jt;
 
     public bool grounded;
+    public static FloatingCapsuleController instance;
 
     public float maxSpeed;
     public float moveMaxForce;
@@ -38,6 +40,7 @@ public class FloatingCapsuleController : MonoBehaviour
     private void Start()
     {
         input = InputManager.instance.input;
+        instance = this;
 
         footstepSrc = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
@@ -101,6 +104,9 @@ public class FloatingCapsuleController : MonoBehaviour
         Crouch();
         UpdateJump();
         Step();
+
+        if (crashTimer > 0)
+            crashTimer = Mathf.MoveTowards(crashTimer, 0, Time.deltaTime);
     }
 
     void Float()
@@ -258,5 +264,32 @@ public class FloatingCapsuleController : MonoBehaviour
 
         Vector3 offset = transform.root.position - transform.position;
         transform.root.position = target.position + offset;
+    }
+
+    public float minVelocityToCrash;
+    public float crashTimeDelay;
+    float crashTimer;
+    public void OnCollisionEnter(Collision collision)
+    {
+
+        if (crashTimer > 0)
+            return;
+
+        if (Mathf.Abs(rb.velocity.y) > minVelocityToCrash)
+        {
+            shake.ShakeScreen(1f * (rb.velocity.magnitude / 2), 0.3f);
+            crashTimer = crashTimeDelay;
+            Collider[] cols = Physics.OverlapSphere(transform.position, 1.2f);
+            foreach (Collider col in cols)
+            {
+                if (col.gameObject.TryGetComponent<Tile>(out var desc))
+                {
+                    if (desc == null)
+                        continue;
+
+                    desc.DoDamage(1f);
+                }
+            }
+        }
     }
 }
