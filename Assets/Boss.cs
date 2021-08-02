@@ -27,6 +27,7 @@ public class Boss : DamageableObject
     MentalState currentState;
 
     public GameObject grenade;
+    public GameObject bigGrenade;
     public TextMeshProUGUI dialogueString;
     public AudioSource src;
     [SerializeField] SkinnedMeshRenderer skin;
@@ -51,6 +52,7 @@ public class Boss : DamageableObject
         attackStates = new AttackState[]
         {
             new FireballAttack(this, 16, grenade),
+            new LargeFireballAttack(this, 16, bigGrenade),
             new ShockwaveAttack(this, 15, 250)
         };
         mentalStates.Add(State.Attacking, new AttackingState(this, attackStates));
