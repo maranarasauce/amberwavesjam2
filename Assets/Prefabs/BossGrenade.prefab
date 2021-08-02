@@ -108,7 +108,7 @@ Transform:
   m_GameObject: {fileID: 935860278282618958}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 7.1056266, y: 0.7033024, z: 21.223564}
-  m_LocalScale: {x: 0.44445, y: 0.44445, z: 0.44445}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 280318890481426293}
   m_Father: {fileID: 0}
@@ -261,9 +261,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38692c517d4c1f845bdac6b2023ee753, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blastRadius: 3
-  damage: 1.5
-  playerDmgReduction: 0
+  blastRadius: 2
+  damage: 1
+  playerDmgReduction: 1
   rb: {fileID: 935860278282619825}
   explosionParticle: {fileID: 167558, guid: a11dc34cafe3dfd4facb59cfb4e72de8, type: 3}
   isSpin: 0

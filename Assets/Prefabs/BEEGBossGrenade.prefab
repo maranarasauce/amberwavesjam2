@@ -263,7 +263,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blastRadius: 4
   damage: 4
-  playerDmgReduction: 0
+  playerDmgReduction: 1
   rb: {fileID: 935860278282619825}
   explosionParticle: {fileID: 167558, guid: a11dc34cafe3dfd4facb59cfb4e72de8, type: 3}
   isSpin: 1

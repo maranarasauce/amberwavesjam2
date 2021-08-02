@@ -14,6 +14,9 @@ public class Boss : DamageableObject
         Dying
     }
 
+    public bool init_NoAI;
+    public bool hard;
+
     Dictionary<State, MentalState> mentalStates = new Dictionary<State, MentalState>();
 
     [Serializable]
@@ -39,45 +42,66 @@ public class Boss : DamageableObject
     public Dialogue[] attack;
     [SerializeField] Dialogue[] hurt;
     [SerializeField] Dialogue[] hurtBIG;
-    [SerializeField] Dialogue[] death;
+    public Dialogue[] death;
     [SerializeField] Dialogue[] intro;
     public Dialogue[] taunt;
-
+    
     protected override void Start()
     {
         base.Start();
 
         base.OnDamage += Boss_OnDamage;
-        mentalStates.Add(State.Idling, new IdleState(this));
-        player = Camera.main.transform;
-        shake = FloatingCapsuleController.instance.GetComponent<ScreenShake>();
+        base.OnKill += Boss_OnKill;
+        percentage = 1f;
 
-        //This is the attack array. Set your attack here if you want the boss to use it!!!
-        List<AttackStateWeight> attackIndex = new List<AttackStateWeight>()
+        if (!init_NoAI)
         {
-            //new AttackStateWeight( Attack Constructor, Weight of 0.0 to 1.0),
-            new AttackStateWeight( 0.9f , new FireballAttack(this, 16, 0f, grenade)),
-            new AttackStateWeight( 0.6f, new LargeFireballAttack(this, 16, 250f, bigGrenade)),
-            new AttackStateWeight( 0.3f, new ShockwaveAttack(this, 15, 250f, shake)),
-            new AttackStateWeight( 0.4f, new JostleAttack(this, 5, 250f)),
-            new AttackStateWeight( 0.5f, new WallClose(this, 9, 400f, shake)),
-            new AttackStateWeight( 0.8f, new PigeonAttack(this, 4f, 0f)),
-            new AttackStateWeight( 0.01f, new FartAttack(this, 11f, 0f))
-        };
+            LookAtPlayer(true);
 
-        List<float> weights = new List<float>();
-        List<AttackState> attackStates = new List<AttackState>();
+            mentalStates.Add(State.Idling, new IdleState(this));
+            player = Camera.main.transform;
+            shake = FloatingCapsuleController.instance.GetComponent<ScreenShake>();
 
-        foreach (AttackStateWeight weight in attackIndex)
-        {
-            weights.Add(weight.weight);
-            attackStates.Add(weight.state);
+            if (hard)
+                health = 500f;
+
+            //This is the attack array. Set your attack here if you want the boss to use it!!!
+            List<AttackStateWeight> attackIndex = new List<AttackStateWeight>()
+            {
+                //new AttackStateWeight( Attack Constructor, Weight of 0.0 to 1.0),
+                new AttackStateWeight( 0.9f , new FireballAttack(this, 16, 0f, grenade)),
+                new AttackStateWeight( 0.6f, new LargeFireballAttack(this, 16, 250f, bigGrenade)),
+                new AttackStateWeight( 0.3f, new ShockwaveAttack(this, 15, 200f, shake)),
+                new AttackStateWeight( 0.4f, new JostleAttack(this, 5, 300f)),
+                new AttackStateWeight( 0.5f, new WallClose(this, 9, 400f, shake)),
+                new AttackStateWeight( 0.8f, new PigeonAttack(this, 4f, 0f)),
+                new AttackStateWeight( 0.01f, new FartAttack(this, 11f, 0f)),
+                new AttackStateWeight( 0.6f, new OppressorAttack(this, 10f, 0f) )
+            };
+
+            List<float> weights = new List<float>();
+            List<AttackState> attackStates = new List<AttackState>();
+
+            foreach (AttackStateWeight weight in attackIndex)
+            {
+                weights.Add(weight.weight);
+
+                if (hard)
+                    weight.state.SetHealthCeiling(0f);
+
+                attackStates.Add(weight.state);
+            }
+
+            mentalStates.Add(State.Attacking, new AttackingState(this, weights.ToArray(), attackStates.ToArray()));
+            mentalStates.Add(State.Dying, new DeathState(this));
+            SwitchState(State.Idling);
+            Speak(intro);
         }
 
-        mentalStates.Add(State.Attacking, new AttackingState(this, weights.ToArray(), attackStates.ToArray()));
-        SwitchState(State.Idling);
-        Speak(intro);
+        startingHealth = health;
     }
+
+   
 
     public void Update()
     {
@@ -93,13 +117,20 @@ public class Boss : DamageableObject
             currentState.Update();
 
         skin.SetBlendShapeWeight(0, Mathf.Sin(Time.time * 10) * 100);
-        skin.rootBone.transform.LookAt(player);
-        Vector3 rootBoneRot = skin.rootBone.rotation.eulerAngles;
-        rootBoneRot.x = 0;
-        skin.rootBone.rotation = Quaternion.Euler(rootBoneRot);
+        
+        if (lookAtPlayer)
+        {
+            skin.rootBone.transform.LookAt(player);
+            Vector3 rootBoneRot = skin.rootBone.rotation.eulerAngles;
+            rootBoneRot.x = 0;
+            skin.rootBone.rotation = Quaternion.Euler(rootBoneRot);
+        }
     }
 
     #region Damage
+    [NonSerialized] public float startingHealth;
+    float percentage;
+    public float HealthPercent { get => percentage; }
     private void Boss_OnDamage()
     {
         if (LastDamageValue >= 3)
@@ -109,15 +140,27 @@ public class Boss : DamageableObject
         {
             RandomSpeak(hurt, 15);
         }
+
+        percentage = Health / startingHealth;
     }
 
-    
+    [NonSerialized] public bool dead;
+    private void Boss_OnKill()
+    {
+        if (!dead)
+        {
+            SwitchState(State.Dying);
+        }
+        
+    }
     #endregion
 
     #region Dialogue
     bool speaking;
     public void Speak(Dialogue[] dialogueSet)
     {
+        if (dead)
+            return;
         Dialogue dialogue = dialogueSet.GetRandomValue();
         src.clip = dialogue.clip;
         dialogueString.text = dialogue.subtitle;
@@ -208,13 +251,19 @@ public class Boss : DamageableObject
     public Animator animator;
     bool usingGun;
     Transform target;
-    public Vector3 lookRotUp;
+    public ParticleSystem deathParticleSystem;
     public void AnimateGun(bool animateGun, Transform target)
     {
         usingGun = animateGun;
         this.target = target;
         string animate = (usingGun ? "SatanGun" : "SatanIdle");
         animator.Play(animate);
+    }
+
+    bool lookAtPlayer;
+    public void LookAtPlayer(bool look)
+    {
+        lookAtPlayer = look;
     }
 
     public void LateUpdate()
@@ -308,6 +357,11 @@ public class AttackState : MentalState
     float onlyBelowHealth = 0;
     float roundTimer;
     public float roundDelay;
+
+    public void SetHealthCeiling(float onlyBelowHealth)
+    {
+        this.onlyBelowHealth = onlyBelowHealth;
+    }
 
     public virtual string GetAttackName()
     {

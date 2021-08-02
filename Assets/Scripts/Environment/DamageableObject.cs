@@ -53,4 +53,9 @@ public class DamageableObject : MonoBehaviour, IDamageable
     {
         OnKill?.Invoke();
     }
+
+    public virtual bool IsTile()
+    {
+        return false;
+    }
 }

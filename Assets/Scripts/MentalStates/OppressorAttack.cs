@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PigeonAttack : AttackState
+public class OppressorAttack : AttackState
 {
     //This is the constructor. At the minimum you need to have (Boss boss, float time) : base (boss, time)
-    public PigeonAttack(Boss boss, float time, float healthCeiling) : base(boss, time, healthCeiling)
+    public OppressorAttack(Boss boss, float time, float healthCeiling) : base(boss, time, healthCeiling)
     {
-        bossBullet = Resources.Load<GameObject>("Prefabs/BossBullet");
+        bossBullet = Resources.Load<GameObject>("Prefabs/BossBulletNoTile");
         fireSfx = Resources.Load<AudioClip>("SFX/bossGunFire");
         firePoint = boss.gunFirePoint;
     }
@@ -18,10 +18,10 @@ public class PigeonAttack : AttackState
         base.BeginState();
         boss.Speak(boss.attack);
         playerRb = FloatingCapsuleController.instance.rb;
-        LaunchPlayer();
         boss.AnimateGun(true, playerRb.transform);
         originalDelta = boss.maxDistanceDelta;
         boss.maxDistanceDelta = 0.05f;
+        fireDelay = (0.1f * boss.HealthPercent) + 0.025f;
     }
 
     public override string GetAttackName()
@@ -41,9 +41,11 @@ public class PigeonAttack : AttackState
     Transform firePoint;
     GameObject bossBullet;
     AudioClip fireSfx;
-    float fireDelay = 0.2f;
-    float fireTimer;
     float originalDelta;
+    float fireTimer;
+    float fireDelay = 0.05f;
+    Vector3 playerPos;
+    Vector3 currentAim;
     //Called every frame. Wow!
     public override void Update()
     {
@@ -51,46 +53,36 @@ public class PigeonAttack : AttackState
 
         boss.Move(new Vector3(15f, 10f, 15f));
 
-        if (Mathf.Sin(TimeLeft * 1.5f) > 0)
+        float timeElapsed = roundDelay - TimeLeft;
+
+        if (1.1f > timeElapsed && timeElapsed > 1f)
         {
+            currentAim = playerCamera.position;
+        }
+        if (timeElapsed > 1.1f)
+        {
+            playerPos = playerCamera.position;
+            currentAim = Vector3.MoveTowards(currentAim, playerPos, 80 / Time.deltaTime);
+
+            Vector3 fireDir = (currentAim - firePoint.position);
+            fireDir.y = (Mathf.Sin(timeElapsed * 20) * 6f) - 7f;
+            fireDir.x += Random.Range(-1f, 1f);
             if (fireTimer <= 0)
             {
                 fireTimer = fireDelay;
-                FireBullet();
+                FireBullet(fireDir);
             }
             else fireTimer = Mathf.MoveTowards(fireTimer, 0, Time.deltaTime);
         }
     }
 
     Vector3 lastVel = Vector3.zero;
-    void FireBullet()
+    void FireBullet(Vector3 fireDir)
     {
-        boss.PlaySFX(fireSfx, 0.5f, true);
-
-        Vector3 targetPos = playerRb.transform.position;
-
-        float dist = Vector3.Distance(targetPos, firePoint.position);
-        float timeToHit = dist / 40;
-        Vector3 speed = playerRb.velocity;
-        lastVel = playerRb.velocity;
-
-        speed *= timeToHit;
-
-        targetPos += speed;
-
-        Vector3 direction = (targetPos - firePoint.position);
-
-        float healthPercentage = (boss.HealthPercent * 0.4f) + 0.13f;
-        Vector3 fireDir = direction.normalized + (Random.insideUnitSphere * healthPercentage);
-
+        boss.PlaySFX(fireSfx, 0.4f, true);
         GameObject.Instantiate(bossBullet, firePoint.position, Quaternion.LookRotation(fireDir));
     }
 
-    void LaunchPlayer()
-    {
-        Vector3 launchVector = new Vector3(0, 1f, 0);
-        playerRb.AddForce(launchVector * 23f, ForceMode.VelocityChange);
-    }
 
     
 }

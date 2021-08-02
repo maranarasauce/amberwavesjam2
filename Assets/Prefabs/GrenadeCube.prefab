@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 280318890481426293}
   - component: {fileID: 3768456390393532624}
   - component: {fileID: 1416602359314113562}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Uzi Grenade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 935860278282619825}
   - component: {fileID: 4600900494107480147}
   - component: {fileID: 7709817946237578485}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GrenadeCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -263,7 +263,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blastRadius: 3
   damage: 3
-  playerDmgReduction: 0
+  playerDmgReduction: 0.3
   rb: {fileID: 935860278282619825}
   explosionParticle: {fileID: 167558, guid: a11dc34cafe3dfd4facb59cfb4e72de8, type: 3}
   isSpin: 0
