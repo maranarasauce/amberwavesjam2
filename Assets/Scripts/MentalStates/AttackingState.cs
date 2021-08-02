@@ -5,8 +5,10 @@ using UnityEngine;
 public class AttackingState : MentalState
 {
     AttackState[] attackStates;
-    public AttackingState(Boss boss, AttackState[] attackStates) : base(boss)
+    float[] weights;
+    public AttackingState(Boss boss, float[] weights, AttackState[] attackStates) : base(boss)
     {
+        this.weights = weights;
         this.attackStates = attackStates;
     }
 
@@ -25,10 +27,26 @@ public class AttackingState : MentalState
         else roundTimer = Mathf.MoveTowards(roundTimer, 0, Time.deltaTime);
     }
 
+    AttackState lastEntry;
     public override void EndState()
     {
         base.EndState();
-        AttackState entry = attackStates.RandomEntry<AttackState>();
+        int weight = Boss.GetRandomWeightedIndex(weights);
+        AttackState entry = attackStates[weight];
+        int regen = 0;
+        while ((entry.HealthCeiling < boss.Health && entry.HealthCeiling != 0) || entry == lastEntry)
+        {
+            regen++;
+            weight = Boss.GetRandomWeightedIndex(weights);
+            
+            entry = attackStates[weight];
+
+            if (regen == 5) {
+                break;
+            }
+                
+        }
+        lastEntry = entry;
         boss.SwitchState(entry);
     }
 }

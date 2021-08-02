@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &117031214829031078
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 931657177005955251}
+  m_Layer: 0
+  m_Name: UziPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &931657177005955251
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117031214829031078}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.609, z: 2.405}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7531110020170904513}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &248451373140317318
 GameObject:
   m_ObjectHideFlags: 0
@@ -774,11 +804,7 @@ MonoBehaviour:
     subtitle: Just die!
   - clip: {fileID: 8300000, guid: 76e6bb6123ddf19428316e8b9a916a70, type: 3}
     subtitle: Just DIE!
-  - clip: {fileID: 8300000, guid: 5a9c93b86bc44bc41b692befd37d45f4, type: 3}
-    subtitle: Take this!
   - clip: {fileID: 8300000, guid: 51b381f44f593e44a8872a825f0d36c6, type: 3}
-    subtitle: Take this!
-  - clip: {fileID: 8300000, guid: 6209f5c0fd0c2c043ac02ca0a016b190, type: 3}
     subtitle: Take this!
   hurt:
   - clip: {fileID: 8300000, guid: 6f2ce9bba04ed624fb5f5d0bb44df2f7, type: 3}
@@ -833,6 +859,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   bicepL: {fileID: 444663760742255010}
+  gunFirePoint: {fileID: 931657177005955251}
   animator: {fileID: 5373058403831267504}
   lookRotUp: {x: 0, y: 0, z: 0}
 --- !u!82 &532610459981974081
@@ -6117,7 +6144,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7531110020170904513
 Transform:
   m_ObjectHideFlags: 0
@@ -6132,6 +6159,7 @@ Transform:
   - {fileID: 7482413115999668174}
   - {fileID: 3049206063653875042}
   - {fileID: 6236717756375392395}
+  - {fileID: 931657177005955251}
   m_Father: {fileID: 6775547119633376968}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -90, y: 114.316, z: -180}

@@ -118,7 +118,7 @@ public class ShockwaveAttack : AttackState
 
             if (delta > 2.75f)
             {
-                Collider[] cols = Physics.OverlapSphere(landPoint, ((delta - 2.75f) * 26f), boss.collisionMask);
+                Collider[] cols = Physics.OverlapSphere(landPoint, ((delta - 2.75f) * 18f), boss.collisionMask);
                 foreach (Collider col in cols)
                 {
                     if (damageableObjects.Contains(col))
@@ -134,7 +134,8 @@ public class ShockwaveAttack : AttackState
 
             boss.maxDistanceDelta = 0.05f;
 
-            boss.Move(Vector3.up * 0.1f, true);
+            if (boss.transform.position.y < centerPoint.y)
+                boss.Move(Vector3.up * 0.1f, true);
 
             if (delta > 5.75f)
             {

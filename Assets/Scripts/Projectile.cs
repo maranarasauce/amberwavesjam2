@@ -14,16 +14,16 @@ using UnityEngine;
         }
 
         public bool updateForwardAxis;
-        private void FixedUpdate()
+        private void Update()
         {
             if (updateForwardAxis)
                 forward = transform.forward;
 
-            float speed = constantSpeed * Time.fixedDeltaTime;
+            float speed = constantSpeed * Time.deltaTime;
             Vector3 velocity = forward * speed;
             transform.position += velocity;
 
-            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, speed, hitMask, QueryTriggerInteraction.Collide))
+            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, speed + 0.1f, hitMask, QueryTriggerInteraction.Collide))
             {
                 Hit(hit);
             }
@@ -31,6 +31,11 @@ using UnityEngine;
 
         void Hit(RaycastHit hit)
         {
-        Destroy(this);
+            if (hit.collider.gameObject.TryGetComponent<DamageableObject>(out var desc))
+            {
+                desc.DoDamage(damageAmount);
+            }
+
+            Destroy(gameObject);
         }
-}
+    }

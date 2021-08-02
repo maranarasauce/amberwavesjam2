@@ -5,7 +5,7 @@ using UnityEngine;
 public class LargeFireballAttack : AttackState
 {
     //This is the constructor. At the minimum you need to have (Boss boss, float time) : base (boss, time)
-    public LargeFireballAttack(Boss boss, float time, GameObject fireballPrefab) : base(boss, time)
+    public LargeFireballAttack(Boss boss, float time, float healthCeiling, GameObject fireballPrefab) : base(boss, time, healthCeiling)
     {
         this.grenadePrefab = fireballPrefab;
     }
