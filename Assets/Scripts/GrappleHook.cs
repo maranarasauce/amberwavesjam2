@@ -11,6 +11,8 @@ public class GrappleHook : MonoBehaviour
     private FloatingCapsuleController floatingCapsule;
     private ConfigurableJoint joint;
     private LineRenderer lr;
+    
+    public ScreenShake shake;
 
     public bool CanGrapple { get => canGrapple; }
 
@@ -67,6 +69,7 @@ public class GrappleHook : MonoBehaviour
             RaycastHit hitInfo;
             if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hitInfo, grappleMaxDistance))
             {
+                shake.ShakeScreen(1f, 0.1f);
                 DrawRope(hitInfo.point);
                 StartCoroutine(WaitToGrapple(hitInfo));
             }
@@ -96,6 +99,7 @@ public class GrappleHook : MonoBehaviour
     public IEnumerator waitForSec()
     {
         yield return new WaitForSeconds(0.2f);
+        shake.ShakeScreen(0.6f, 1f);
         lr.positionCount = 1;
         floatingCapsule.enabled = true;
         yield return new WaitForSeconds(coolDown);

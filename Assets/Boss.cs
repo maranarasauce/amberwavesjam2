@@ -26,6 +26,7 @@ public class Boss : DamageableObject
     AttackState currentAttack;
     MentalState currentState;
 
+    public ScreenShake shake;
     public GameObject grenade;
     public GameObject bigGrenade;
     public TextMeshProUGUI dialogueString;
