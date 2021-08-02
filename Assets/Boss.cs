@@ -30,6 +30,7 @@ public class Boss : DamageableObject
     public GameObject bigGrenade;
     public TextMeshProUGUI dialogueString;
     public AudioSource src;
+    public AudioSource fxSrc;
     [SerializeField] SkinnedMeshRenderer skin;
     Transform player;
 
@@ -53,7 +54,8 @@ public class Boss : DamageableObject
         {
             new FireballAttack(this, 16, grenade),
             new LargeFireballAttack(this, 16, bigGrenade),
-            new ShockwaveAttack(this, 15, 250)
+            new ShockwaveAttack(this, 15, 250),
+            new JostleAttack(this, 5, 250)
         };
         mentalStates.Add(State.Attacking, new AttackingState(this, attackStates));
         SwitchState(State.Idling);
@@ -70,7 +72,8 @@ public class Boss : DamageableObject
             }
         }
 
-        currentState.Update();
+        if (currentState != null)
+            currentState.Update();
 
         skin.SetBlendShapeWeight(0, Mathf.Sin(Time.time * 10) * 100);
         skin.rootBone.transform.LookAt(player);
@@ -119,6 +122,24 @@ public class Boss : DamageableObject
         yield return new WaitForSecondsRealtime(1);
         dialogueString.text = null;
     }
+
+    public void PlaySFX(AudioClip clip, float volume, bool spatial)
+    {
+        fxSrc.spatialBlend = (spatial ? 1f : 0f);
+        fxSrc.volume = volume;
+        fxSrc.clip = clip;
+        fxSrc.Play();
+    }
+
+    public void PlaySFX(AudioClip clip, float volume)
+    {
+        PlaySFX(clip, volume, false);
+    }
+
+    public void PlaySFX(AudioClip clip)
+    {
+        PlaySFX(clip, 1f, false);
+    }
     #endregion
 
     #region States
@@ -160,6 +181,30 @@ public class Boss : DamageableObject
         if (additive)
             position += transform.position;
         Move(position);
+    }
+    #endregion
+
+    #region Animation
+    [SerializeField] Transform bicepL;
+    public Animator animator;
+    bool usingGun;
+    Transform target;
+    public Vector3 lookRotUp;
+    public void AnimateGun(bool animateGun, Transform target)
+    {
+        usingGun = animateGun;
+        this.target = target;
+        string animate = (usingGun ? "SatanGun" : "SatanIdle");
+        animator.Play(animate);
+    }
+
+    public void LateUpdate()
+    {
+        if (usingGun)
+        {
+            bicepL.LookAt(target, Vector3.up);
+            bicepL.rotation *= Quaternion.FromToRotation(Vector3.up, Vector3.forward);
+        }
     }
     #endregion
 }
