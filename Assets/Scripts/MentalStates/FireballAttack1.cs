@@ -7,6 +7,8 @@ public class ShockwaveAttack : AttackState
     //This is the constructor. At the minimum you need to have (Boss boss, float time) : base (boss, time)
     public ShockwaveAttack(Boss boss, float time, float healthCeiling) : base(boss, time, healthCeiling)
     {
+        impactSound = Resources.Load<AudioClip>("SFX/shockwaveImpact");
+        riseSound = Resources.Load<AudioClip>("SFX/shockwaveRise");
     }
 
     //This gets called whenever the state begins. Init timers here and such
@@ -19,6 +21,9 @@ public class ShockwaveAttack : AttackState
         originalDelta = boss.maxDistanceDelta;
     }
 
+    AudioClip impactSound;
+    AudioClip riseSound;
+    AudioClip fallSound;
     public override string GetAttackName()
     {
         return "Shockwave";
@@ -41,6 +46,7 @@ public class ShockwaveAttack : AttackState
     bool launched;
     float landedTime;
     Vector3 centerPoint;
+    Vector3 landPoint;
     HashSet<Collider> damageableObjects = new HashSet<Collider>();
     public override void Update()
     {
@@ -54,6 +60,9 @@ public class ShockwaveAttack : AttackState
         //Move up for a bit
         if (13f > TimeLeft && TimeLeft > 10f)
         {
+            if (!boss.fxSrc.isPlaying)
+                boss.PlaySFX(riseSound, 0.5f, true);
+
             boss.maxDistanceDelta = 0.02f;
 
             boss.Move(Vector3.up * 0.1f, true);
@@ -65,6 +74,9 @@ public class ShockwaveAttack : AttackState
 
             if (Physics.Raycast(boss.transform.position, -boss.transform.up, boss.collisionRadius + 1, boss.collisionMask))
             {
+                boss.PlaySFX(impactSound, 0.5f, false);
+                landPoint = boss.transform.position;
+
                 Collider[] cols = Physics.OverlapSphere(boss.transform.position, 5f, boss.collisionMask);
                 foreach (Collider col in cols)
                 {
@@ -80,6 +92,7 @@ public class ShockwaveAttack : AttackState
 
             boss.Move(Vector3.down * 50, true);
         }
+
         #region DidntLand
         //If never lands, go back to center
         if (4f > TimeLeft && TimeLeft > 1f && !landed)
@@ -103,16 +116,19 @@ public class ShockwaveAttack : AttackState
         {
             float delta = landedTime - TimeLeft;
 
-            Collider[] cols = Physics.OverlapSphere(boss.transform.position, delta * 26f, boss.collisionMask);
-            foreach (Collider col in cols)
+            if (delta > 2.75f)
             {
-                if (damageableObjects.Contains(col))
-                    continue;
-                damageableObjects.Add(col);
-
-                if (col.gameObject.TryGetComponent<DamageableObject>(out var desc))
+                Collider[] cols = Physics.OverlapSphere(landPoint, ((delta - 2.75f) * 26f), boss.collisionMask);
+                foreach (Collider col in cols)
                 {
-                    desc.DoDamage(1, true);
+                    if (damageableObjects.Contains(col))
+                        continue;
+                    damageableObjects.Add(col);
+
+                    if (col.gameObject.TryGetComponent<DamageableObject>(out var desc))
+                    {
+                        desc.DoDamage(1, true);
+                    }
                 }
             }
 
@@ -120,7 +136,7 @@ public class ShockwaveAttack : AttackState
 
             boss.Move(Vector3.up * 0.1f, true);
 
-            if (delta > 3)
+            if (delta > 5.75f)
             {
                 EndState();
             }
