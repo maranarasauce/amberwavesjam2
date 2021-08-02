@@ -48,7 +48,7 @@ public class JostleAttack : AttackState
     void LaunchPlayer()
     {
         boss.PlaySFX(punchClip, 0.25f);
-        grenadeLaunchTimer = UnityEngine.Random.Range(0.3f, 1f);
+        grenadeLaunchTimer = UnityEngine.Random.Range(0.3f, 1f) * boss.HealthPercent + 0.3f;
         Vector3 launchVector = new Vector3(UnityEngine.Random.Range(-1f, 1f), UnityEngine.Random.Range(-0.2f, 0.4f), UnityEngine.Random.Range(-1f, 1f));
         playerRb.AddForce(launchVector * 50f, ForceMode.VelocityChange);
     }

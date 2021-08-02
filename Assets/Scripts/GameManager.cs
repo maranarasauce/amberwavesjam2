@@ -9,6 +9,7 @@ public enum SceneIndex
     Manager = 0,
     TitleScreen = 1,
     Arena = 2,
+    Win = 3
 }
 
 
@@ -41,12 +42,12 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
         //@Refactor: Move somewhere else and clean it up
-        if (Input.GetKeyDown(KeyCode.Escape) 
+        if (Input.GetKey(KeyCode.RightAlt) && Input.GetKeyDown(KeyCode.Escape) 
             && !tempPress
             && SceneManager.GetActiveScene().buildIndex != (int)SceneIndex.TitleScreen)
         {
             tempPress = true;
-            StartCoroutine(LoadMainMenu());
+            StartCoroutine(LoadSceneCoroutine(SceneIndex.TitleScreen));
         }
 
         if (!tempPress && SceneManager.GetActiveScene().buildIndex == (int)SceneIndex.TitleScreen)
@@ -57,30 +58,25 @@ public class GameManager : MonoBehaviour
 
     // Some of this feels stupid
     // - parz
-    public IEnumerator LoadGame()
+    // I tried simplifying it - mara
+
+    public void SwapActiveScene(SceneIndex scene)
     {
-        LoadFade();
-
-        yield return new WaitForSeconds(loadingScreen.fadeTime);
-
-        sceneLoading.Add(SceneManager.UnloadSceneAsync((int)SceneIndex.TitleScreen));
-        sceneLoading.Add(SceneManager.LoadSceneAsync((int)SceneIndex.Arena, LoadSceneMode.Additive));
-
-        SceneLoadProgress(SceneIndex.Arena);
+        StartCoroutine(LoadSceneCoroutine(scene));
     }
-
-
-    public IEnumerator LoadMainMenu()
+    public IEnumerator LoadSceneCoroutine(SceneIndex scene)
     {
         LoadFade();
 
         yield return new WaitForSeconds(loadingScreen.fadeTime);
 
         sceneLoading.Add(SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene()));
-        sceneLoading.Add(SceneManager.LoadSceneAsync((int)SceneIndex.TitleScreen, LoadSceneMode.Additive));
 
-        SceneLoadProgress(SceneIndex.TitleScreen);
+        sceneLoading.Add(SceneManager.LoadSceneAsync((int)scene, LoadSceneMode.Additive));
+        
+        SceneLoadProgress(scene);
     }
+    
 
     private IEnumerator SceneLoadProgress(Scene nextActiveScene)
     {
@@ -91,7 +87,7 @@ public class GameManager : MonoBehaviour
         {
             while (!sceneLoading[i].isDone)
             {
-                yield return null;
+                yield return new WaitForEndOfFrame();
             }
         }
 

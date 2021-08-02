@@ -47,9 +47,8 @@ public class Grenade : MonoBehaviour
 
                 var dmg = damage;
 
-                // @Incomplete: 
-                //if (TryGetComponent<PlayerHealth>(out _))
-                //    dmg *= playerDmgReduction;
+                if (col.gameObject.TryGetComponent<PlayerHealth>(out _))
+                   dmg *= playerDmgReduction;
 
                 desc.DoDamage(dmg);
             }
