@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Maranara.InputShell;
 
 public class Gun : MonoBehaviour
 {
@@ -35,7 +36,7 @@ public class Gun : MonoBehaviour
     public float fireRate;
     public int maxAmmo;
     bool reloading;
-
+    private PlayerInput input;
 
     enum Animation
     {
@@ -50,24 +51,17 @@ public class Gun : MonoBehaviour
         playCam = Camera.main.transform;
         ammo = maxAmmo;
         reloadEvent.executedAction += FinishReload;
+        
+        input = InputManager.instance.input;
+        input.leftTriggerClick.onStateUp += OnTriggerRelease;
+        input.rightTriggerClick.onStateDown += GrenadeLaunch;
     }
 
     private void Update()
     {
-        if (Input.GetMouseButton(0) && !reloading)
+        if (input.leftTriggerClick.value && !reloading)
         {
             Fire();
-        }
-        if (Input.GetMouseButtonUp(0))
-        {
-            timeTillFire = 0;
-            if (!reloading)
-                SetAnim(Animation.Idle);
-        }
-        if (Input.GetMouseButtonDown(1))
-        {
-            if (grenadeReady)
-                GrenadeLaunch();
         }
         
         
@@ -86,6 +80,8 @@ public class Gun : MonoBehaviour
     }
 
     
+
+
     void Fire()
     {
         shake.ShakeScreen(0.05f, 0.1f);
@@ -129,6 +125,8 @@ public class Gun : MonoBehaviour
 
     void GrenadeLaunch()
     {
+        if(!grenadeReady) { return; }
+
         shake.ShakeScreen(3f, 0.1f);
         //gunUI.ToggleGrenade(true);
         gunUI.GrenadeReset();
@@ -154,6 +152,13 @@ public class Gun : MonoBehaviour
         SetAnim(Animation.Idle);
         ammo = maxAmmo;
         reloading = false;
+    }
+
+    private void OnTriggerRelease()
+    {
+        timeTillFire = 0;
+        if (!reloading)
+            SetAnim(Animation.Idle);
     }
 
     void SetAnim(Animation state)

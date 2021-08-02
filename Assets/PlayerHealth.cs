@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerHealth : DamageableObject
 {
     ScreenShake shake;
-    private void Start()
+    protected override void Start()
     {
         shake = gameObject.GetComponent<ScreenShake>();
     }

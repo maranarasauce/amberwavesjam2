@@ -11,6 +11,6 @@ public class MusicLooper : MonoBehaviour
             Destroy(gameObject);
 
         instance = this;
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
 }

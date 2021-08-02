@@ -71,9 +71,10 @@ namespace Maranara.InputShell
                 else Cursor.lockState = CursorLockMode.Locked;
             }
 
-            bool grappling = Input.GetKey(KeyCode.E);
-            input.buttonX.Update(grappling);
 
+            input.buttonX.Update(Input.GetKey(KeyCode.E));
+            input.leftTriggerClick.Update(Input.GetMouseButton(0));
+            input.rightTriggerClick.Update(Input.GetMouseButton(1));
         }
     }
 

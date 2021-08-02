@@ -31,7 +31,7 @@ public class LoadingScreen : MonoBehaviour
 
         while(c.a != goal)
         {
-            c.a = Mathf.MoveTowards(c.a, goal, Time.deltaTime / fadeTime);
+            c.a = Mathf.MoveTowards(c.a, goal, Time.unscaledDeltaTime / fadeTime);
             background.color = c;
 
             yield return null;

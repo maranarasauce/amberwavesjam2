@@ -14,14 +14,7 @@ public class SceneRestart : MonoBehaviour
 
     public void Restart()
     {
-        SceneManager.LoadScene(SceneManager.GetSceneByName("Arena").buildIndex);
-    }
-}
-
-public static class ArrayExtension
-{
-    public static T GetRandomValue<T>(this T[] array)
-    {
-        return array[UnityEngine.Random.Range(0, array.Length)];
+        //SceneManager.LoadScene(SceneManager.GetSceneByName("Arena").buildIndex);
+        GameManager.instance.LoadGame();
     }
 }
