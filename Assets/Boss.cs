@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
@@ -14,7 +15,6 @@ public class Boss : DamageableObject
     }
 
     Dictionary<State, MentalState> mentalStates = new Dictionary<State, MentalState>();
-    AttackState[] attackStates;
 
     [Serializable]
     public class Dialogue
@@ -26,12 +26,17 @@ public class Boss : DamageableObject
     AttackState currentAttack;
     MentalState currentState;
 
+    ScreenShake shake;
     public GameObject grenade;
+    public GameObject bigGrenade;
     public TextMeshProUGUI dialogueString;
     public AudioSource src;
+    public AudioSource fxSrc;
+    [SerializeField] SkinnedMeshRenderer skin;
+    Transform player;
 
     [Header("Dialogue Entries")]
-    [SerializeField] Dialogue[] attack;
+    public Dialogue[] attack;
     [SerializeField] Dialogue[] hurt;
     [SerializeField] Dialogue[] hurtBIG;
     [SerializeField] Dialogue[] death;
@@ -44,12 +49,32 @@ public class Boss : DamageableObject
 
         base.OnDamage += Boss_OnDamage;
         mentalStates.Add(State.Idling, new IdleState(this));
+        player = Camera.main.transform;
+        shake = FloatingCapsuleController.instance.GetComponent<ScreenShake>();
+
         //This is the attack array. Set your attack here if you want the boss to use it!!!
-        attackStates = new AttackState[]
+        List<AttackStateWeight> attackIndex = new List<AttackStateWeight>()
         {
-            new FireballAttack(this, 16, grenade)
+            //new AttackStateWeight( Attack Constructor, Weight of 0.0 to 1.0),
+            new AttackStateWeight( 0.9f , new FireballAttack(this, 16, 0f, grenade)),
+            new AttackStateWeight( 0.6f, new LargeFireballAttack(this, 16, 250f, bigGrenade)),
+            new AttackStateWeight( 0.3f, new ShockwaveAttack(this, 15, 250f, shake)),
+            new AttackStateWeight( 0.4f, new JostleAttack(this, 5, 250f)),
+            new AttackStateWeight( 0.5f, new WallClose(this, 9, 400f, shake)),
+            new AttackStateWeight( 0.8f, new PigeonAttack(this, 4f, 0f)),
+            new AttackStateWeight( 0.01f, new FartAttack(this, 11f, 0f))
         };
-        mentalStates.Add(State.Attacking, new AttackingState(this, attackStates));
+
+        List<float> weights = new List<float>();
+        List<AttackState> attackStates = new List<AttackState>();
+
+        foreach (AttackStateWeight weight in attackIndex)
+        {
+            weights.Add(weight.weight);
+            attackStates.Add(weight.state);
+        }
+
+        mentalStates.Add(State.Attacking, new AttackingState(this, weights.ToArray(), attackStates.ToArray()));
         SwitchState(State.Idling);
         Speak(intro);
     }
@@ -64,7 +89,14 @@ public class Boss : DamageableObject
             }
         }
 
-        currentState.Update();
+        if (currentState != null)
+            currentState.Update();
+
+        skin.SetBlendShapeWeight(0, Mathf.Sin(Time.time * 10) * 100);
+        skin.rootBone.transform.LookAt(player);
+        Vector3 rootBoneRot = skin.rootBone.rotation.eulerAngles;
+        rootBoneRot.x = 0;
+        skin.rootBone.rotation = Quaternion.Euler(rootBoneRot);
     }
 
     #region Damage
@@ -106,6 +138,24 @@ public class Boss : DamageableObject
         speaking = false;
         yield return new WaitForSecondsRealtime(1);
         dialogueString.text = null;
+    }
+
+    public void PlaySFX(AudioClip clip, float volume, bool spatial)
+    {
+        fxSrc.spatialBlend = (spatial ? 1f : 0f);
+        fxSrc.volume = volume;
+        fxSrc.clip = clip;
+        fxSrc.Play();
+    }
+
+    public void PlaySFX(AudioClip clip, float volume)
+    {
+        PlaySFX(clip, volume, false);
+    }
+
+    public void PlaySFX(AudioClip clip)
+    {
+        PlaySFX(clip, 1f, false);
     }
     #endregion
 
@@ -150,6 +200,70 @@ public class Boss : DamageableObject
         Move(position);
     }
     #endregion
+
+    #region Animation
+    [Header("Animation")]
+    [SerializeField] Transform bicepL;
+    public Transform gunFirePoint;
+    public Animator animator;
+    bool usingGun;
+    Transform target;
+    public Vector3 lookRotUp;
+    public void AnimateGun(bool animateGun, Transform target)
+    {
+        usingGun = animateGun;
+        this.target = target;
+        string animate = (usingGun ? "SatanGun" : "SatanIdle");
+        animator.Play(animate);
+    }
+
+    public void LateUpdate()
+    {
+        if (usingGun)
+        {
+            bicepL.LookAt(target, Vector3.up);
+            bicepL.rotation *= Quaternion.FromToRotation(Vector3.up, Vector3.forward);
+        }
+    }
+    #endregion
+
+    #region Math
+    public static int GetRandomWeightedIndex(float[] weights)
+    {
+        if (weights == null || weights.Length == 0) return -1;
+
+        float w;
+        float t = 0;
+        int i;
+        for (i = 0; i < weights.Length; i++)
+        {
+            w = weights[i];
+
+            if (float.IsPositiveInfinity(w))
+            {
+                return i;
+            }
+            else if (w >= 0f && !float.IsNaN(w))
+            {
+                t += weights[i];
+            }
+        }
+
+        float r = UnityEngine.Random.value;
+        float s = 0f;
+
+        for (i = 0; i < weights.Length; i++)
+        {
+            w = weights[i];
+            if (float.IsNaN(w) || w <= 0f) continue;
+
+            s += w / t;
+            if (s >= r) return i;
+        }
+
+        return -1;
+    }
+    #endregion
 }
 
 public class MentalState
@@ -182,10 +296,6 @@ public class MentalState
 
 public class AttackState : MentalState
 {
-    public AttackState(Boss boss, float time) : base(boss)
-    {
-        roundDelay = time;
-    }
 
     public AttackState(Boss boss, float time, float healthCeiling) : base(boss)
     {
@@ -198,6 +308,11 @@ public class AttackState : MentalState
     float onlyBelowHealth = 0;
     float roundTimer;
     public float roundDelay;
+
+    public virtual string GetAttackName()
+    {
+        return "Base";
+    }
 
     public override void BeginState()
     {
@@ -219,3 +334,16 @@ public class AttackState : MentalState
         boss.SwitchState(Boss.State.Idling);
     }
 }
+
+public class AttackStateWeight
+{
+    public AttackStateWeight(float weight, AttackState state)
+    {
+        this.state = state;
+        this.weight = weight;
+    }
+
+    public AttackState state;
+    public float weight;
+}
+

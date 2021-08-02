@@ -11,7 +11,7 @@ public class IdleState : MentalState
     public override void BeginState()
     {
         circleCenter = boss.transform.position;
-        roundTimer = UnityEngine.Random.Range(5f, 10f);
+        roundTimer = UnityEngine.Random.Range(3f, 5f);
     }
 
     float roundTimerDelay;
