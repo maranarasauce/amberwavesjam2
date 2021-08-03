@@ -15,6 +15,6 @@ public class ActivateHardMode : MonoBehaviour
         HardMode hard = hardGO.AddComponent<HardMode>();
         HardMode.instance = hard;
 
-        GameManager.instance.SwapActiveScene(SceneIndex.Arena);
+        GameManager.inst.SwapActiveScene(SceneIndex.Arena);
     }
 }

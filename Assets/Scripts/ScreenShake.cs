@@ -25,6 +25,8 @@ public class ScreenShake : MonoBehaviour
         {
             while (shakeDecay > 0.01f)
             {
+                if(GameManager.inst.IsPaused) { yield return null; }
+
                 Vector3 rotationAmount;
                 rotationAmount = UnityEngine.Random.insideUnitSphere * shakeCap;
                 rotationAmount.z = 0;

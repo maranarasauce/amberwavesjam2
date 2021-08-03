@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Maranara.InputShell;
 
 
 public enum SceneIndex
@@ -15,17 +17,45 @@ public enum SceneIndex
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;
-    public LoadingScreen loadingScreen;
+    // slowly becoming messy...
+    // - parz
+
+    public bool IsLoading { get => isLoading; }
+    public bool IsPaused { get => isPaused; }
+    public Resolution MaxResolution { get => Screen.resolutions[Screen.resolutions.Length - 1]; }
+    public SceneIndex LastActiveScene { get => lastActiveScene; }
+    public SceneIndex NextActiveScene { get => nextActiveScene; }
+    public PlayerHealth Player { get => GetPlayer(); }
+
+
+    public static GameManager inst;
+
+    public event Action OnLoadStart;
+    public event Action OnLoad;
+    public event Action OnLoadEnd;
+    
+    [SerializeField] private LoadingScreen loadingScreen;
+    [SerializeField] private GameObject pauseScreen;
 
     private List<AsyncOperation> sceneLoading = new List<AsyncOperation>();
+    private bool isLoading = false;
+    private bool isPaused = false;
+
+    private PCInputPlugin inputPlugin;
+    private PlayerHealth player;
+
+    private float globalMaxVolume;
+    private RenderTexture mainRenderTex;
+
+    private SceneIndex lastActiveScene;
+    private SceneIndex nextActiveScene = SceneIndex.TitleScreen;
 
     private void Awake()
     {
         #region Singleton Crap
-        if (instance == null)
+        if (inst == null)
         {
-            instance = this;
+            inst = this;
         }
         else
         {
@@ -34,54 +64,124 @@ public class GameManager : MonoBehaviour
         }
         #endregion
 
+        SetGlobalVolume(AudioListener.volume);
+        SetRenderResolution(MaxResolution.width, MaxResolution.height);
+
+        // Load into TitleScreen
         sceneLoading.Add(SceneManager.LoadSceneAsync((int)SceneIndex.TitleScreen, LoadSceneMode.Additive));
-        SceneLoadProgress(SceneIndex.TitleScreen);
+        SceneIndex[] toLoad = { SceneIndex.TitleScreen };
+        StartCoroutine(WaitForLoadCoroutine());
     }
 
-    bool tempPress = false;
     private void Update()
     {
-        //@Refactor: Move somewhere else and clean it up
-        if (Input.GetKey(KeyCode.RightAlt) && Input.GetKeyDown(KeyCode.Escape) 
-            && !tempPress
-            && SceneManager.GetActiveScene().buildIndex != (int)SceneIndex.TitleScreen)
+        #region pausing
+        if (isPaused && Input.GetKeyDown(KeyCode.Return))
         {
-            tempPress = true;
-            StartCoroutine(LoadSceneCoroutine(SceneIndex.TitleScreen));
+            isPaused = false;
+            pauseScreen.SetActive(false);
+
+            LoadTitleScreen();
         }
 
-        if (!tempPress && SceneManager.GetActiveScene().buildIndex == (int)SceneIndex.TitleScreen)
-            tempPress = false;
+        if(!isLoading && Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().buildIndex == (int)SceneIndex.Arena)
+        {
+            isPaused = !isPaused;
+
+            pauseScreen.SetActive(isPaused);
+
+            Time.timeScale = isPaused ? 0 : 1;
+
+            if (inputPlugin == null) // can't cache on start since the object is in another scene
+                inputPlugin = FindObjectOfType<PCInputPlugin>();
+
+            inputPlugin.enabled = !isPaused;
+
+            AudioListener.volume = IsPaused ? globalMaxVolume * 0.5f : globalMaxVolume;
+        }
+        #endregion
     }
 
-    #region Scene Loading logic
+    #region Scene Loading
 
     // Some of this feels stupid
     // - parz
-    // I tried simplifying it - mara
 
-    public void SwapActiveScene(SceneIndex scene)
+    #region load initiators
+    /// <summary>
+    /// Unloads the ActiveScene and Loads <paramref name="sceneToLoad"/>
+    /// </summary>
+    /// <param name="sceneToLoad"></param>
+    public void SwapActiveScene(SceneIndex sceneToLoad)
     {
-        StartCoroutine(LoadSceneCoroutine(scene));
+        if(isLoading) { return; }
+
+        StartCoroutine(LoadSceneCoroutine(sceneToLoad));
     }
-    public IEnumerator LoadSceneCoroutine(SceneIndex scene)
-    {
-        LoadFade();
 
-        yield return new WaitForSeconds(loadingScreen.fadeTime);
+    public void LoadGame()
+    {
+        if(isLoading) { return; }
+
+        // For some dumbass reason, SceneManager cannot return a scene struct if it's not already loaded.
+        SceneIndex[] toLoad   = { SceneIndex.Arena }; 
+        Scene[] toUnload      = { SceneManager.GetActiveScene() };
+
+
+        StartCoroutine(LoadScenesCoroutine(toLoad, toUnload, SceneIndex.Arena));
+    }
+
+    public void LoadTitleScreen()
+    {
+        if (isLoading) { return; }
+        
+        SceneIndex[] toLoad = { SceneIndex.TitleScreen }; 
+        Scene[] toUnload    = { SceneManager.GetActiveScene() };
+
+        Time.timeScale = 0;
+
+        StartCoroutine(LoadScenesCoroutine(toLoad, toUnload, SceneIndex.TitleScreen));
+    }
+    #endregion
+
+    private IEnumerator LoadSceneCoroutine(SceneIndex scene)
+    {
+        LoadStart(scene);
+
+        yield return new WaitForSecondsRealtime(loadingScreen.fadeTime);
 
         sceneLoading.Add(SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene()));
-
         sceneLoading.Add(SceneManager.LoadSceneAsync((int)scene, LoadSceneMode.Additive));
-        
-        SceneLoadProgress(scene);
+
+        StartCoroutine(WaitForLoadCoroutine());
     }
     
 
-    private IEnumerator SceneLoadProgress(Scene nextActiveScene)
+
+    // here for redundancy
+    private IEnumerator LoadScenesCoroutine(SceneIndex[] toLoad, Scene[] toUnload, SceneIndex _nextActiveScene)
     {
-        if (loadingScreen.isActiveAndEnabled)
-            loadingScreen.ShowLoadingAnim(true);
+        LoadStart(_nextActiveScene);
+
+        yield return new WaitForSecondsRealtime(loadingScreen.fadeTime);
+
+        foreach(var scene in toUnload)
+        {
+            sceneLoading.Add(SceneManager.UnloadSceneAsync(scene));
+        }
+
+        foreach (var scene in toLoad)
+        {
+            sceneLoading.Add(SceneManager.LoadSceneAsync((int)scene, LoadSceneMode.Additive));
+        }
+
+        StartCoroutine(WaitForLoadCoroutine());
+    }
+
+
+    private IEnumerator WaitForLoadCoroutine()
+    {
+        OnLoad?.Invoke();
 
         for (int i = 0; i < sceneLoading.Count; i++)
         {
@@ -91,29 +191,56 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (loadingScreen.isActiveAndEnabled)
-        {
-            loadingScreen.ShowLoadingAnim(false);
-            loadingScreen.FadeOut(); // fade out to next scene after loading is complete
-        }
+        isLoading = false;
+        OnLoadEnd?.Invoke();
 
-        SceneManager.SetActiveScene(nextActiveScene);
-     
+        Time.timeScale = 1;
+
+        SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex((int)nextActiveScene));
+
         sceneLoading.Clear();
     }
-    #endregion
-
-    #region Helper Methods
-    private void SceneLoadProgress(SceneIndex nextActiveScene)
+    
+    private void LoadStart(SceneIndex nextActive)
     {
-        Scene s = SceneManager.GetSceneByBuildIndex((int)nextActiveScene);
+        isLoading = true;
+        
+        lastActiveScene = (SceneIndex)SceneManager.GetActiveScene().buildIndex;
+        nextActiveScene = nextActive;
 
-        StartCoroutine(SceneLoadProgress(s));
-    }
-    private void LoadFade()
-    {
-        loadingScreen.gameObject.SetActive(true);
-        loadingScreen.FadeIn();
+        OnLoadStart?.Invoke();
     }
     #endregion
+
+    private PlayerHealth GetPlayer()
+    {
+        if(SceneManager.GetActiveScene().buildIndex == (int)SceneIndex.Arena)
+            player = FindObjectOfType<PlayerHealth>();
+
+        return player ?? null;
+    }
+
+    public void SetGlobalVolume(float volume)
+    {
+        AudioListener.volume = volume;
+        globalMaxVolume = volume;
+    }
+
+    public void ScaleRenderResolution(float scalar)
+    {
+        var w = (int)(MaxResolution.width  * scalar);
+        var h = (int)(MaxResolution.height * scalar);
+
+        SetRenderResolution(w, h);
+    }
+
+    public void SetRenderResolution(int width, int height)
+    {
+        if(mainRenderTex != null)
+            mainRenderTex.Release();
+        mainRenderTex = new RenderTexture(width, height, 24);
+        Graphics.SetRenderTarget(mainRenderTex);
+
+        Debug.Log(mainRenderTex.width + "|" + mainRenderTex.height);
+    }
 }
