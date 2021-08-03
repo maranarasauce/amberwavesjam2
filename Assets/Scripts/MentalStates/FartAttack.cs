@@ -58,7 +58,7 @@ public class FartAttack : AttackState
             {
                 fard = true;
 
-                boss.maxDistanceDelta = 0.01f;
+                boss.maxDistanceDelta = 20 * 300f;
 
                 boss.PlaySFX(fartSound, 0.5f, false);
 

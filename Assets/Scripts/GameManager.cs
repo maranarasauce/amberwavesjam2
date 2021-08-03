@@ -98,6 +98,12 @@ public class GameManager : MonoBehaviour
             inputPlugin.enabled = !isPaused;
 
             AudioListener.volume = IsPaused ? globalMaxVolume * 0.5f : globalMaxVolume;
+
+            if (!isPaused)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
         }
         #endregion
     }

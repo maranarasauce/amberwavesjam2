@@ -20,7 +20,7 @@ public class OppressorAttack : AttackState
         playerRb = FloatingCapsuleController.instance.rb;
         boss.AnimateGun(true, playerRb.transform);
         originalDelta = boss.maxDistanceDelta;
-        boss.maxDistanceDelta = 0.05f;
+        boss.maxDistanceDelta = 0.05f * 300f;
         fireDelay = (0.1f * boss.HealthPercent) + 0.025f;
     }
 

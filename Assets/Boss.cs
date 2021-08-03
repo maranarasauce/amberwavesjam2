@@ -233,10 +233,10 @@ public class Boss : DamageableObject
         if (Physics.Raycast(origin, direction.normalized, out RaycastHit hitInfo, distance, collisionMask))
         {
             Vector3 calcPoint = hitInfo.point + (hitInfo.normal * collisionRadius * 2);
-            transform.position = Vector3.MoveTowards(transform.position, calcPoint, maxDistanceDelta);
+            transform.position = Vector3.MoveTowards(transform.position, calcPoint, maxDistanceDelta * Time.deltaTime);
         } else
         {
-            transform.position = Vector3.MoveTowards(transform.position, position, maxDistanceDelta);
+            transform.position = Vector3.MoveTowards(transform.position, position, maxDistanceDelta * Time.deltaTime);
         }
     }
 

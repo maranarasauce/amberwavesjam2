@@ -65,14 +65,14 @@ public class ShockwaveAttack : AttackState
             if (!boss.fxSrc.isPlaying)
                 boss.PlaySFX(riseSound, 0.5f, true);
 
-            boss.maxDistanceDelta = 0.02f;
+            boss.maxDistanceDelta = 0.02f * 300f;
 
             boss.Move(Vector3.up * 0.1f * 2f, true);
         }
         //Slam down and land
         if (10f > TimeLeft && TimeLeft > 4f && !landed)
         {
-            boss.maxDistanceDelta = 0.43f;
+            boss.maxDistanceDelta = 0.43f * 300f;
 
             if (Physics.Raycast(boss.transform.position, -boss.transform.up, boss.collisionRadius + 1, boss.collisionMask))
             {
@@ -102,7 +102,7 @@ public class ShockwaveAttack : AttackState
         //If never lands, go back to center
         if (4f > TimeLeft && TimeLeft > 1f && !landed)
         {
-            boss.maxDistanceDelta = 0.8f;
+            boss.maxDistanceDelta = 0.8f * 300f;
             boss.Move(centerPoint);
             if (!launched)
             {
@@ -145,7 +145,7 @@ public class ShockwaveAttack : AttackState
                 }
             }
 
-            boss.maxDistanceDelta = 0.05f;
+            boss.maxDistanceDelta = 0.05f * 300f;
 
             if (boss.transform.position.y < centerPoint.y)
                 boss.Move(Vector3.up * 0.1f * 2f, true);

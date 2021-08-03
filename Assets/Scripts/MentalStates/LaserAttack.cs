@@ -10,11 +10,13 @@ public class LaserAttack : AttackState
         laser = boss.transform.Find("ART/Armature/Spine/Laser").gameObject;
         laserOrigin = boss.transform.Find("ART/Armature/Spine/Laser/LaserOrigin");
         laserParticle = laserOrigin.Find("Particle System");
+        src = boss.transform.Find("SFX/LAZER").GetComponent<AudioSource>();
     }
 
     GameObject laser;
     Transform laserOrigin;
     Transform laserParticle;
+    AudioSource src;
     float originalDelta;
     //This gets called whenever the state begins. Init timers here and such
     public override void BeginState()
@@ -23,8 +25,9 @@ public class LaserAttack : AttackState
         boss.skin.SetBlendShapeWeight(1, 1);
         playerRb = FloatingCapsuleController.instance.rb;
         originalDelta = boss.maxDistanceDelta;
-        boss.maxDistanceDelta = 0.05f;
+        boss.maxDistanceDelta = 0.05f * 300f;
         lasered = false;
+        laserSound = false;
     }
 
     public override string GetAttackName()
@@ -51,6 +54,7 @@ public class LaserAttack : AttackState
     float damageAmount = 0.1f;
 
     float lastX;
+    bool laserSound;
     //Called every frame. Wow!
     public override void Update()
     {
@@ -64,6 +68,11 @@ public class LaserAttack : AttackState
         {
             boss.LookAtPlayer(false);
             currentAim = playerCamera.position;
+            if (laserSound == false)
+            {
+                src.Play();
+                laserSound = true;
+            }
         }
         if (7f > timeElapsed && timeElapsed > 2f)
         {
@@ -103,6 +112,7 @@ public class LaserAttack : AttackState
 
         if (timeElapsed > 7f)
         {
+            src.Stop();
             laser.SetActive(false);
             boss.skin.SetBlendShapeWeight(1, 0);
         }

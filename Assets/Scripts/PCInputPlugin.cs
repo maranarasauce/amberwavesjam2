@@ -14,7 +14,10 @@ namespace Maranara.InputShell
             Camera cam = mainCam.GetComponent<Camera>();
             cam.fieldOfView = 96;
             mainCam.localPosition = new Vector3(0, height, 0);
+        }
 
+        private void OnEnable()
+        {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
@@ -80,16 +83,6 @@ namespace Maranara.InputShell
             Vector2 crouch = new Vector2(0, crouchInt);
 
             input.rightJoystick.Update(crouch);
-
-
-            if (Input.GetKeyDown(KeyCode.Tab))
-            {
-                Cursor.visible = !Cursor.visible;
-                if (Cursor.visible)
-                    Cursor.lockState = CursorLockMode.None;
-                else Cursor.lockState = CursorLockMode.Locked;
-            }
-
 
             input.buttonX.Update(Input.GetKey(KeyCode.E));
             input.leftTriggerClick.Update(Input.GetMouseButton(0));

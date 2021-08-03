@@ -21,7 +21,7 @@ public class PigeonAttack : AttackState
         LaunchPlayer();
         boss.AnimateGun(true, playerRb.transform);
         originalDelta = boss.maxDistanceDelta;
-        boss.maxDistanceDelta = 0.05f;
+        boss.maxDistanceDelta = 0.05f * 300f;
     }
 
     public override string GetAttackName()
