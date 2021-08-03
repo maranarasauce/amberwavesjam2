@@ -438,45 +438,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 1
---- !u!114 &6487045727668813123
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7010085758980971846}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16a7b9589807de24cb082c526e2ed640, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cam: {fileID: 4237153517178932320}
-  shakeDecay: 0
---- !u!114 &8900975237253715164
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7010085758980971846}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 630afd9fb3b15ef43bfea729537521a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damagePS: {fileID: 0}
-  killPS: {fileID: 0}
-  health: 15
-  hurtSource: {fileID: 6390847322345518073}
-  hurtClips:
-  - {fileID: 8300000, guid: 7a7ef1e39c007ff46a1bc7e89c70cfab, type: 3}
-  - {fileID: 8300000, guid: ca221541bac64fc4594dc6dfed93efd5, type: 3}
-  - {fileID: 8300000, guid: 3ff00e543730fa3419db95a79f129416, type: 3}
-  - {fileID: 8300000, guid: eef1e9daa7578fe4495968a4773cc2af, type: 3}
-  - {fileID: 8300000, guid: e157d16009ba0624c832f3004ff61ab2, type: 3}
-  - {fileID: 8300000, guid: ab296c0a65cca014481dc66db6ba7c0e, type: 3}
-  - {fileID: 8300000, guid: 35923b211c4584a40b37dfd1b7d74a31, type: 3}
-  - {fileID: 8300000, guid: 3ef66be08e7edcf44a6c1a6bbabdf426, type: 3}
 --- !u!1 &1533064407145988148
 GameObject:
   m_ObjectHideFlags: 0
@@ -705,6 +666,45 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 1
+--- !u!114 &6487045727668813123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7010085758980971846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16a7b9589807de24cb082c526e2ed640, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cam: {fileID: 4237153517178932320}
+  shakeDecay: 0
+--- !u!114 &8900975237253715164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7010085758980971846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 630afd9fb3b15ef43bfea729537521a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damagePS: {fileID: 0}
+  killPS: {fileID: 0}
+  health: 15
+  hurtSource: {fileID: 6390847322345518073}
+  hurtClips:
+  - {fileID: 8300000, guid: 7a7ef1e39c007ff46a1bc7e89c70cfab, type: 3}
+  - {fileID: 8300000, guid: ca221541bac64fc4594dc6dfed93efd5, type: 3}
+  - {fileID: 8300000, guid: 3ff00e543730fa3419db95a79f129416, type: 3}
+  - {fileID: 8300000, guid: eef1e9daa7578fe4495968a4773cc2af, type: 3}
+  - {fileID: 8300000, guid: e157d16009ba0624c832f3004ff61ab2, type: 3}
+  - {fileID: 8300000, guid: ab296c0a65cca014481dc66db6ba7c0e, type: 3}
+  - {fileID: 8300000, guid: 35923b211c4584a40b37dfd1b7d74a31, type: 3}
+  - {fileID: 8300000, guid: 3ef66be08e7edcf44a6c1a6bbabdf426, type: 3}
 --- !u!1 &7141373357674912817
 GameObject:
   m_ObjectHideFlags: 0

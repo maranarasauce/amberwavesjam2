@@ -75,10 +75,10 @@ public class LaserAttack : AttackState
             {
                 lasered = true;
                 laser.SetActive(true);
-                lastX = rot.x;
+                lastX = 45f;
             }
 
-            lastX = Mathf.MoveTowards(lastX, rot.x, 15f * Time.deltaTime);
+            lastX = Mathf.MoveTowards(lastX, rot.x, 7f * Time.deltaTime);
 
             rot.x = lastX;
             rot.y = 0;
