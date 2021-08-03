@@ -11,6 +11,7 @@ public enum SceneIndex
     Manager = 0,
     TitleScreen = 1,
     Arena = 2,
+    Win = 3
 }
 
 
@@ -154,6 +155,7 @@ public class GameManager : MonoBehaviour
 
         StartCoroutine(WaitForLoadCoroutine());
     }
+    
 
 
     // here for redundancy
@@ -185,7 +187,7 @@ public class GameManager : MonoBehaviour
         {
             while (!sceneLoading[i].isDone)
             {
-                yield return null;
+                yield return new WaitForEndOfFrame();
             }
         }
 

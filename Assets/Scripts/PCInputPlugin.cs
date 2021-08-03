@@ -19,6 +19,12 @@ namespace Maranara.InputShell
             Cursor.visible = false;
         }
 
+        public void OnDisable()
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+
         InputManager manager;
 
         PlayerInput input;
@@ -65,6 +71,8 @@ namespace Maranara.InputShell
             Vector2 joystick = new Vector2(Input.GetAxis("Horizontal") * 2, Input.GetAxis("Vertical") * 2);
             input.leftJoystick.Update(joystick);
             input.buttonA.Update(Input.GetKey(KeyCode.Space));
+
+            input.leftTriggerClick.Update(Input.GetMouseButton(0));
 
             bool crouching = Input.GetKey(KeyCode.LeftShift);
             int crouchInt = (crouching ? -1 : 0);

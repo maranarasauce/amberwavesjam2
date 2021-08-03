@@ -15,6 +15,7 @@ public class LargeFireballAttack : AttackState
     public override void BeginState()
     {
         base.BeginState();
+        grenadeLaunchDelay = (2.8f * boss.HealthPercent) + 1.3f + 4.9f;
         grenadeLaunchTimer = grenadeLaunchDelay;
     }
 
