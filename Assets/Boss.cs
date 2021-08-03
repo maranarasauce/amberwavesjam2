@@ -32,6 +32,7 @@ public class Boss : DamageableObject
     ScreenShake shake;
     public GameObject grenade;
     public GameObject bigGrenade;
+    public GameObject mine;
     public TextMeshProUGUI dialogueString;
     public AudioSource src;
     public AudioSource fxSrc;

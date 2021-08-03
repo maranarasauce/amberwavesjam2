@@ -43336,7 +43336,7 @@ MonoBehaviour:
   - clip: {fileID: 8300000, guid: d14a51d77c43baa4285e560d302c9412, type: 3}
     subtitle: '*grunt*'
   - clip: {fileID: 8300000, guid: f6e857ef09f3f444197a8803a7346b32, type: 3}
-    subtitle: ...Ouch.
+    subtitle: '...Ouch.'
   hurtBIG:
   - clip: {fileID: 8300000, guid: 2b74d8eb5024103488fc0fa0e51355cc, type: 3}
     subtitle: Ouch!
