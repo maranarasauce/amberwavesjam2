@@ -64,7 +64,7 @@ public class Boss : DamageableObject
             shake = FloatingCapsuleController.instance.GetComponent<ScreenShake>();
 
             if (hard)
-                health = 500f;
+                health = 450f;
 
             //This is the attack array. Set your attack here if you want the boss to use it!!!
             List<AttackStateWeight> attackIndex = new List<AttackStateWeight>()
@@ -79,7 +79,8 @@ public class Boss : DamageableObject
                 new AttackStateWeight( 0.8f, new PigeonAttack(this, 4f, 0f)),
                 new AttackStateWeight( 0.01f, new FartAttack(this, 11f, 0f)),
                 new AttackStateWeight( 0.6f, new OppressorAttack(this, 10f, 0f) ),
-                new AttackStateWeight( 0.4f, new LaserAttack(this, 9f, 0f))
+                new AttackStateWeight( 0.4f, new LaserAttack(this, 9f, 0f)),
+                new AttackStateWeight( 0.8f, new MineAttack(this, 5f, 0f, mine))
             };
 
             List<float> weights = new List<float>();

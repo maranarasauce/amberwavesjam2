@@ -43311,6 +43311,7 @@ MonoBehaviour:
   grenade: {fileID: 935860278282618958, guid: 94f184c8a3ad9a54aa772d9975731292, type: 3}
   bigGrenade: {fileID: 935860278282618958, guid: 4e3fce72eb718cf4da826309301e0626,
     type: 3}
+  mine: {fileID: 935860278282618958, guid: 052f7262b15185340a36b1043913a187, type: 3}
   dialogueString: {fileID: 0}
   src: {fileID: 532610459981974081}
   fxSrc: {fileID: 3462989418040746420}
@@ -43336,7 +43337,7 @@ MonoBehaviour:
   - clip: {fileID: 8300000, guid: d14a51d77c43baa4285e560d302c9412, type: 3}
     subtitle: '*grunt*'
   - clip: {fileID: 8300000, guid: f6e857ef09f3f444197a8803a7346b32, type: 3}
-    subtitle: '...Ouch.'
+    subtitle: ...Ouch.
   hurtBIG:
   - clip: {fileID: 8300000, guid: 2b74d8eb5024103488fc0fa0e51355cc, type: 3}
     subtitle: Ouch!
