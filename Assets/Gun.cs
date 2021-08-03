@@ -37,15 +37,16 @@ public class Gun : MonoBehaviour
     public int maxAmmo;
     bool reloading;
     private PlayerInput input;
+    Transform playCam;
+    private PlayerHealth player;
 
     enum Animation
     {
         Idle = 0,
         Fire = 1,
-        Reload = 2
+        Reload = 2,
+        Dead = 4
     }
-
-    Transform playCam;
     private void Start()
     {
         playCam = Camera.main.transform;
@@ -55,10 +56,15 @@ public class Gun : MonoBehaviour
         input = InputManager.instance.input;
         input.leftTriggerClick.onStateUp += OnTriggerRelease;
         input.rightTriggerClick.onStateDown += GrenadeLaunch;
+
+        player = FloatingCapsuleController.instance.GetComponent<PlayerHealth>();
+        player.OnKill += OnDeath;
     }
 
     private void Update()
     {
+        if(player.IsDead) { return; }
+
         if (input.leftTriggerClick.value && !reloading)
         {
             Fire();
@@ -159,6 +165,11 @@ public class Gun : MonoBehaviour
         timeTillFire = 0;
         if (!reloading)
             SetAnim(Animation.Idle);
+    }
+
+    public void OnDeath()
+    {
+        SetAnim(Animation.Dead);
     }
 
     void SetAnim(Animation state)

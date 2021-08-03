@@ -6,9 +6,6 @@ using UnityEngine.UI;
 public class UIController : MonoBehaviour
 {
     public Text ammoCounter;
-    [SerializeField] private Image grenadeIcon;
-    [SerializeField] private Image grappleIcon;
-
     [SerializeField] private RectMask2D grenadeMask;
     [SerializeField] private RectMask2D grappleMask;
 
@@ -57,19 +54,5 @@ public class UIController : MonoBehaviour
     public void Fill(RectMask2D mask, float value)
     {
         mask.padding = new Vector4(0, 0, 0, Mathf.Lerp(mask.rectTransform.rect.height, 0, value));
-    }
-
-    public void ToggleGrenade(bool i)
-    {
-        var color = grenadeIcon.color;
-        color.a = (i) ? 0.4f : 1f;
-        grenadeIcon.color = color;
-    }
-
-    public void ToggleGrapple(bool i)
-    {
-        var color = grappleIcon.color;
-        color.a = (i) ? 0.4f : 1f;
-        grappleIcon.color = color;
     }
 }

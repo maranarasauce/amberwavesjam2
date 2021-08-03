@@ -14,8 +14,8 @@ public class LoadingScreen : MonoBehaviour
 
     private void Start()
     {
-        GameManager.instance.OnLoadStart += FadeIn;
-        GameManager.instance.OnLoadEnd   += FadeOut;
+        GameManager.inst.OnLoadStart += FadeIn;
+        GameManager.inst.OnLoadEnd   += FadeOut;
     }
 
     public void FadeIn()

@@ -37,10 +37,14 @@ public class FloatingCapsuleController : MonoBehaviour
     PlayerInput input;
     public Transform cameraTransform;
 
+    private void Awake()
+    {
+        instance = this;
+    }
+
     private void Start()
     {
         input = InputManager.instance.input;
-        instance = this;
 
         footstepSrc = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();

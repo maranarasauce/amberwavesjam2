@@ -58,23 +58,23 @@ public class MainMenu : MonoBehaviour
     
     public void OnVolumeChanged()
     {
-        GameManager.instance.SetGlobalVolume(volumeSlider.value / volumeSlider.maxValue);
+        GameManager.inst.SetGlobalVolume(volumeSlider.value / volumeSlider.maxValue);
     }
 
     public void OnResolutionChanged()
     {
-        GameManager.instance.ScaleRenderResolution(resolutionSlider.value);
+        GameManager.inst.ScaleRenderResolution(resolutionSlider.value);
     }
 
 
     public void PlayGame()
     {
-        GameManager.instance.LoadGame();
+        GameManager.inst.LoadGame();
     }
     
     public void ExitGame()
     {
-        if (!GameManager.instance.IsLoading)
+        if (!GameManager.inst.IsLoading)
             Application.Quit();
     }
 }

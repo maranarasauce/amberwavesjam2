@@ -21,24 +21,27 @@ public class GameManager : MonoBehaviour
 
     public bool IsLoading { get => isLoading; }
     public bool IsPaused { get => isPaused; }
-
     public Resolution MaxResolution { get => Screen.resolutions[Screen.resolutions.Length - 1]; }
+    public SceneIndex LastActiveScene { get => lastActiveScene; }
+    public SceneIndex NextActiveScene { get => nextActiveScene; }
+    public PlayerHealth Player { get => GetPlayer(); }
 
-    public static GameManager instance;
-    public LoadingScreen loadingScreen;
-    public GameObject pauseScreen;
 
-    public AudioSource arenaMusic;
+    public static GameManager inst;
 
     public event Action OnLoadStart;
     public event Action OnLoad;
     public event Action OnLoadEnd;
-
+    
+    [SerializeField] private LoadingScreen loadingScreen;
+    [SerializeField] private GameObject pauseScreen;
 
     private List<AsyncOperation> sceneLoading = new List<AsyncOperation>();
     private bool isLoading = false;
     private bool isPaused = false;
+
     private PCInputPlugin inputPlugin;
+    private PlayerHealth player;
 
     private float globalMaxVolume;
     private RenderTexture mainRenderTex;
@@ -49,9 +52,9 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         #region Singleton Crap
-        if (instance == null)
+        if (inst == null)
         {
-            instance = this;
+            inst = this;
         }
         else
         {
@@ -60,9 +63,8 @@ public class GameManager : MonoBehaviour
         }
         #endregion
 
-        SetRenderResolution(MaxResolution.width, MaxResolution.height);
-
         SetGlobalVolume(AudioListener.volume);
+        SetRenderResolution(MaxResolution.width, MaxResolution.height);
 
         // Load into TitleScreen
         sceneLoading.Add(SceneManager.LoadSceneAsync((int)SceneIndex.TitleScreen, LoadSceneMode.Additive));
@@ -97,7 +99,6 @@ public class GameManager : MonoBehaviour
             AudioListener.volume = IsPaused ? globalMaxVolume * 0.5f : globalMaxVolume;
         }
         #endregion
-
     }
 
     #region Scene Loading
@@ -209,6 +210,13 @@ public class GameManager : MonoBehaviour
     }
     #endregion
 
+    private PlayerHealth GetPlayer()
+    {
+        if(SceneManager.GetActiveScene().buildIndex == (int)SceneIndex.Arena)
+            player = FindObjectOfType<PlayerHealth>();
+
+        return player ?? null;
+    }
 
     public void SetGlobalVolume(float volume)
     {

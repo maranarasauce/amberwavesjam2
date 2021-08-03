@@ -22,12 +22,15 @@ namespace Maranara.InputShell
         InputManager manager;
 
         PlayerInput input;
+        PlayerHealth player;
         Transform mainCam;
         public float height;
         private void Start()
         {
             manager = InputManager.instance;
             input = manager.input;
+
+            player = FloatingCapsuleController.instance.GetComponent<PlayerHealth>();
         }
 
         public float Sensitivity
@@ -44,6 +47,21 @@ namespace Maranara.InputShell
         const string yAxis = "Mouse Y";
         void Update()
         {
+            rotation.x += Input.GetAxis(xAxis) * sensitivity;
+            rotation.y += Input.GetAxis(yAxis) * sensitivity;
+            rotation.y = Mathf.Clamp(rotation.y, -yRotationLimit, yRotationLimit);
+            var xQuat = Quaternion.AngleAxis(rotation.x, Vector3.up);
+            var yQuat = Quaternion.AngleAxis(rotation.y, Vector3.left);
+
+            mainCam.localRotation = xQuat * yQuat;
+            
+            if(player.IsDead) { return; }
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                player.DoDamage(10f);
+            }
+
+
             Vector2 joystick = new Vector2(Input.GetAxis("Horizontal") * 2, Input.GetAxis("Vertical") * 2);
             input.leftJoystick.Update(joystick);
             input.buttonA.Update(Input.GetKey(KeyCode.Space));
@@ -55,13 +73,6 @@ namespace Maranara.InputShell
 
             input.rightJoystick.Update(crouch);
 
-            rotation.x += Input.GetAxis(xAxis) * sensitivity;
-            rotation.y += Input.GetAxis(yAxis) * sensitivity;
-            rotation.y = Mathf.Clamp(rotation.y, -yRotationLimit, yRotationLimit);
-            var xQuat = Quaternion.AngleAxis(rotation.x, Vector3.up);
-            var yQuat = Quaternion.AngleAxis(rotation.y, Vector3.left);
-
-            mainCam.localRotation = xQuat * yQuat;
 
             if (Input.GetKeyDown(KeyCode.Tab))
             {
