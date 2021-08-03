@@ -36,6 +36,7 @@ public class Boss : DamageableObject
     public TextMeshProUGUI dialogueString;
     public AudioSource src;
     public AudioSource fxSrc;
+    public AudioSource deathSrc;
     [SerializeField] public SkinnedMeshRenderer skin;
     Transform player;
 
@@ -105,8 +106,6 @@ public class Boss : DamageableObject
         startingHealth = health;
     }
 
-   
-
     public void Update()
     {
         if (speaking)
@@ -153,6 +152,7 @@ public class Boss : DamageableObject
     {
         if (!dead)
         {
+            deathSrc.Play();
             SwitchState(State.Dying);
         }
         
