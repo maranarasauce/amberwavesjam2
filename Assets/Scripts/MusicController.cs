@@ -8,10 +8,13 @@ public class MusicController : MonoBehaviour
     // Currently hardcoded for arena
 
     public AudioSource arenaAudio;
+    public AudioClip[] arenaMusiksPool;
+    List<AudioClip> arenaMusiks = new List<AudioClip>();
 
     private void Start()
     {
         GameManager.inst.OnLoadEnd += ControlArenaAudio;
+        arenaMusiks.AddRange(arenaMusiksPool);
     }
 
     private void ControlArenaAudio()
@@ -19,7 +22,9 @@ public class MusicController : MonoBehaviour
         if(GameManager.inst.NextActiveScene == SceneIndex.Arena)
         {
             if (!arenaAudio.isPlaying)
-                arenaAudio.Play();
+            {
+                PlayRandomSong();    
+            }
         }
         else
         {
@@ -28,8 +33,20 @@ public class MusicController : MonoBehaviour
 
     }
 
-    public void PlayAudio(AudioSource source)
+    public void Update()
     {
-        source.Play();
+        if (!arenaAudio.isPlaying)
+            PlayRandomSong();
+    }
+
+    public void PlayRandomSong()
+    {
+        if (arenaMusiks.Count == 0)
+            arenaMusiks.AddRange(arenaMusiksPool);
+
+        AudioClip clip = arenaMusiks[UnityEngine.Random.Range(0, arenaMusiks.Count)];
+        arenaMusiks.Remove(clip);
+        arenaAudio.clip = clip;
+        arenaAudio.Play();
     }
 }
