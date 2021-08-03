@@ -7,7 +7,7 @@ public class MainMenu : MonoBehaviour
 {
     public void PlayGame()
     {
-        StartCoroutine(GameManager.instance.LoadGame());
+        StartCoroutine(GameManager.instance.LoadSceneCoroutine(SceneIndex.Arena));
     }
     public void ExitGame()
     {
@@ -16,7 +16,7 @@ public class MainMenu : MonoBehaviour
 
     public void ToGoMenu()
     {
-        StartCoroutine(GameManager.instance.LoadMainMenu());
+        StartCoroutine(GameManager.instance.LoadSceneCoroutine(SceneIndex.TitleScreen));
     }
 }
 

@@ -83,7 +83,10 @@ public class GrappleHook : MonoBehaviour
         joint.xDrive = newDrive;
         joint.yDrive = newDrive;
         joint.zDrive = newDrive;
-        playerRB.AddForce((hitInfo.point - transform.position) * grappleForce);
+        Vector3 pullForce = (hitInfo.point - transform.position) * grappleForce;
+        float clamp = 60000f;
+        pullForce.y = Mathf.Clamp(pullForce.y, -clamp, clamp);
+        playerRB.AddForce(pullForce);
         StartCoroutine(waitForSec());
     }
 
