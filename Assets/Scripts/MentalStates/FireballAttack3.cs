@@ -27,6 +27,15 @@ public class WallClose : AttackState
         grenadeLaunchTimer = grenadeLaunchDelay;
         boss.PlaySFX(moveSound, 0.34f, false);
         isShaking = true;
+
+        if (!isClosed)
+        {
+            Debug.Log("LAUNCH");
+
+            Vector3 towardsCenter = (new Vector3(15f, 30f, 15f) - playerCamera.transform.position);
+
+            FloatingCapsuleController.instance.rb.AddForce(towardsCenter * 3500f);
+        }
     }
 
     public override string GetAttackName()

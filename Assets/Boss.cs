@@ -35,7 +35,7 @@ public class Boss : DamageableObject
     public TextMeshProUGUI dialogueString;
     public AudioSource src;
     public AudioSource fxSrc;
-    [SerializeField] SkinnedMeshRenderer skin;
+    [SerializeField] public SkinnedMeshRenderer skin;
     Transform player;
 
     [Header("Dialogue Entries")]
@@ -69,14 +69,16 @@ public class Boss : DamageableObject
             List<AttackStateWeight> attackIndex = new List<AttackStateWeight>()
             {
                 //new AttackStateWeight( Attack Constructor, Weight of 0.0 to 1.0),
+
                 new AttackStateWeight( 0.9f , new FireballAttack(this, 16, 0f, grenade)),
                 new AttackStateWeight( 0.6f, new LargeFireballAttack(this, 16, 250f, bigGrenade)),
-                new AttackStateWeight( 0.3f, new ShockwaveAttack(this, 15, 200f, shake)),
+                new AttackStateWeight( 0.3f, new ShockwaveAttack(this, 15, 150f, shake)),
                 new AttackStateWeight( 0.4f, new JostleAttack(this, 5, 300f)),
                 new AttackStateWeight( 0.5f, new WallClose(this, 9, 400f, shake)),
                 new AttackStateWeight( 0.8f, new PigeonAttack(this, 4f, 0f)),
                 new AttackStateWeight( 0.01f, new FartAttack(this, 11f, 0f)),
-                new AttackStateWeight( 0.6f, new OppressorAttack(this, 10f, 0f) )
+                new AttackStateWeight( 0.6f, new OppressorAttack(this, 10f, 0f) ),
+                new AttackStateWeight( 0.4f, new LaserAttack(this, 9f, 0f))
             };
 
             List<float> weights = new List<float>();
