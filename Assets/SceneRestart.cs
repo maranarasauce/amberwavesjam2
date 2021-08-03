@@ -15,6 +15,6 @@ public class SceneRestart : MonoBehaviour
     public void Restart()
     {
         //SceneManager.LoadScene(SceneManager.GetSceneByName("Arena").buildIndex);
-        GameManager.instance.LoadGame();
+        GameManager.instance.SwapActiveScene(SceneIndex.Arena);
     }
-}
+} 

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -15,6 +16,9 @@ public enum SceneIndex
 
 public class GameManager : MonoBehaviour
 {
+    // slowly becoming messy...
+    // - parz
+
     public bool IsLoading { get => isLoading; }
     public bool IsPaused { get => isPaused; }
 
@@ -24,6 +28,13 @@ public class GameManager : MonoBehaviour
     public LoadingScreen loadingScreen;
     public GameObject pauseScreen;
 
+    public AudioSource arenaMusic;
+
+    public event Action OnLoadStart;
+    public event Action OnLoad;
+    public event Action OnLoadEnd;
+
+
     private List<AsyncOperation> sceneLoading = new List<AsyncOperation>();
     private bool isLoading = false;
     private bool isPaused = false;
@@ -31,6 +42,9 @@ public class GameManager : MonoBehaviour
 
     private float globalMaxVolume;
     private RenderTexture mainRenderTex;
+
+    private SceneIndex lastActiveScene;
+    private SceneIndex nextActiveScene = SceneIndex.TitleScreen;
 
     private void Awake()
     {
@@ -50,8 +64,10 @@ public class GameManager : MonoBehaviour
 
         SetGlobalVolume(AudioListener.volume);
 
+        // Load into TitleScreen
         sceneLoading.Add(SceneManager.LoadSceneAsync((int)SceneIndex.TitleScreen, LoadSceneMode.Additive));
-        SceneLoadProgress(SceneIndex.TitleScreen);
+        SceneIndex[] toLoad = { SceneIndex.TitleScreen };
+        StartCoroutine(WaitForLoadCoroutine());
     }
 
     private void Update()
@@ -89,6 +105,11 @@ public class GameManager : MonoBehaviour
     // Some of this feels stupid
     // - parz
 
+    #region load initiators
+    /// <summary>
+    /// Unloads the ActiveScene and Loads <paramref name="sceneToLoad"/>
+    /// </summary>
+    /// <param name="sceneToLoad"></param>
     public void SwapActiveScene(SceneIndex sceneToLoad)
     {
         if(isLoading) { return; }
@@ -104,14 +125,14 @@ public class GameManager : MonoBehaviour
         SceneIndex[] toLoad   = { SceneIndex.Arena }; 
         Scene[] toUnload      = { SceneManager.GetActiveScene() };
 
+
         StartCoroutine(LoadScenesCoroutine(toLoad, toUnload, SceneIndex.Arena));
     }
 
     public void LoadTitleScreen()
     {
         if (isLoading) { return; }
-
-        // For some dumbass reason, SceneManager cannot return a scene struct if it's not already loaded.
+        
         SceneIndex[] toLoad = { SceneIndex.TitleScreen }; 
         Scene[] toUnload    = { SceneManager.GetActiveScene() };
 
@@ -119,23 +140,25 @@ public class GameManager : MonoBehaviour
 
         StartCoroutine(LoadScenesCoroutine(toLoad, toUnload, SceneIndex.TitleScreen));
     }
-
+    #endregion
 
     private IEnumerator LoadSceneCoroutine(SceneIndex scene)
     {
-        LoadFade();
+        LoadStart(scene);
 
         yield return new WaitForSecondsRealtime(loadingScreen.fadeTime);
 
         sceneLoading.Add(SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene()));
         sceneLoading.Add(SceneManager.LoadSceneAsync((int)scene, LoadSceneMode.Additive));
 
-        SceneLoadProgress(scene);
+        StartCoroutine(WaitForLoadCoroutine());
     }
 
-    private IEnumerator LoadScenesCoroutine(SceneIndex[] toLoad, Scene[] toUnload, SceneIndex nextActiveScene)
+
+    // here for redundancy
+    private IEnumerator LoadScenesCoroutine(SceneIndex[] toLoad, Scene[] toUnload, SceneIndex _nextActiveScene)
     {
-        LoadFade();
+        LoadStart(_nextActiveScene);
 
         yield return new WaitForSecondsRealtime(loadingScreen.fadeTime);
 
@@ -149,14 +172,13 @@ public class GameManager : MonoBehaviour
             sceneLoading.Add(SceneManager.LoadSceneAsync((int)scene, LoadSceneMode.Additive));
         }
 
-        SceneLoadProgress(nextActiveScene);
+        StartCoroutine(WaitForLoadCoroutine());
     }
 
 
-    private IEnumerator SceneLoadProgress(Scene nextActiveScene)
+    private IEnumerator WaitForLoadCoroutine()
     {
-        if (loadingScreen.isActiveAndEnabled)
-            loadingScreen.ShowLoadingAnim(true);
+        OnLoad?.Invoke();
 
         for (int i = 0; i < sceneLoading.Count; i++)
         {
@@ -166,31 +188,24 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (loadingScreen.isActiveAndEnabled)
-        {
-            loadingScreen.ShowLoadingAnim(false);
-            loadingScreen.FadeOut(); // fade out to next scene after loading is complete
-        }
+        isLoading = false;
+        OnLoadEnd?.Invoke();
 
         Time.timeScale = 1;
 
-        isLoading = false;
-        SceneManager.SetActiveScene(nextActiveScene);
+        SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex((int)nextActiveScene));
 
         sceneLoading.Clear();
     }
-
-    private void SceneLoadProgress(SceneIndex nextActiveScene)
-    {
-        Scene s = SceneManager.GetSceneByBuildIndex((int)nextActiveScene);
-
-        StartCoroutine(SceneLoadProgress(s));
-    }
-    private void LoadFade()
+    
+    private void LoadStart(SceneIndex nextActive)
     {
         isLoading = true;
-        loadingScreen.gameObject.SetActive(true);
-        loadingScreen.FadeIn();
+        
+        lastActiveScene = (SceneIndex)SceneManager.GetActiveScene().buildIndex;
+        nextActiveScene = nextActive;
+
+        OnLoadStart?.Invoke();
     }
     #endregion
 
@@ -200,7 +215,6 @@ public class GameManager : MonoBehaviour
         AudioListener.volume = volume;
         globalMaxVolume = volume;
     }
-
 
     public void ScaleRenderResolution(float scalar)
     {

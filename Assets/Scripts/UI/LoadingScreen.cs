@@ -12,6 +12,12 @@ public class LoadingScreen : MonoBehaviour
     // Some of this also feels stupid
     // - parz
 
+    private void Start()
+    {
+        GameManager.instance.OnLoadStart += FadeIn;
+        GameManager.instance.OnLoadEnd   += FadeOut;
+    }
+
     public void FadeIn()
     {
         SetBG(0);
@@ -21,6 +27,7 @@ public class LoadingScreen : MonoBehaviour
     public void FadeOut()
     {
         SetBG(1);
+        ShowLoadingAnim(false);
         StartCoroutine(DoFade(false));
     }
 
@@ -37,18 +44,10 @@ public class LoadingScreen : MonoBehaviour
             yield return null;
         }
 
-        //for (float t = 0f; t < 1f; t += Time.deltaTime / fadeTime)
-        //{
-        //    c.a = Mathf.Lerp(c.a, goal, t);
-        //    background.color = c;
-            
-        //    yield return null;
-        //}
-
-        if (!fadeIn)
-            gameObject.SetActive(false);
+        if (fadeIn)
+            ShowLoadingAnim(true);
     }
-    
+
     public void ShowLoadingAnim(bool b)
     {
         text.SetActive(b);
