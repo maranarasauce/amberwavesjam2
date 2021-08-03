@@ -2,45 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WallClose : AttackState
+public class MineAttack : AttackState
 {
-    bool isClosed;
-
-    GameObject[] walls;
     //This is the constructor. At the minimum you need to have (Boss boss, float time) : base (boss, time)
-    public WallClose(Boss boss, float time, float healthCeiling, ScreenShake shake) : base(boss, time, healthCeiling)
+    public MineAttack(Boss boss, float time, float healthCeiling, GameObject mine) : base(boss, time, healthCeiling)
     {
-        moveSound = Resources.Load<AudioClip>("SFX/wallMove");
-        walls = GameObject.FindGameObjectsWithTag("Wall");
-        this.shake = shake;
+        this.grenadePrefab = mine;
     }
 
-    bool isShaking;
-    ScreenShake shake;
-    AudioClip moveSound;
     GameObject grenadePrefab;
     //This gets called whenever the state begins. Init timers here and such
     public override void BeginState()
     {
         base.BeginState();
-        wallTimer = wallTimerDelay;
+        grenadeLaunchDelay = (2.8f * boss.HealthPercent) + 1.3f;
         grenadeLaunchTimer = grenadeLaunchDelay;
-        boss.PlaySFX(moveSound, 0.34f, false);
-        isShaking = true;
-
-        if (!isClosed)
-        {
-            Debug.Log("LAUNCH");
-
-            Vector3 towardsCenter = (new Vector3(15f, 30f, 15f) - playerCamera.transform.position);
-
-            FloatingCapsuleController.instance.rb.AddForce(towardsCenter * 3500f);
-        }
     }
 
     public override string GetAttackName()
     {
-        return "WallClose";
+        return "Fireball";
     }
 
     //This gets called whenever the attack timer is up and it switches back to Idle. You don't need this, but it's here if you want it.
@@ -50,7 +31,7 @@ public class WallClose : AttackState
     }
 
     float height = 10.5f;
-    public float grenadeLaunchDelay = 3.9f;
+    public float grenadeLaunchDelay = 3f;
     public float grenadeLaunchTimer;
     float lastMove;
     //Called every frame. Wow!
@@ -58,12 +39,6 @@ public class WallClose : AttackState
     {
         base.Update();
         
-        if (isShaking)
-        {
-            shake.ShakeScreen(1.4f, 10f);
-            isShaking = false;
-        }
-
         //This moves the Boss to the midpoint between the player and the wall - it also does some sin movement to keep the player on his toes.
         Vector3 directionTowardsPlayer = (playerCamera.position - boss.transform.position);
         Vector3 wallPoint = Vector3.zero;
@@ -86,31 +61,22 @@ public class WallClose : AttackState
         boss.Move(midpoint);
         lastMove = move;
 
-        // doo doo ca ca
-        MoveWalls();
+        //Grenade is launched every 3 seconds, based on the grenadeLaunchDelay variable.
+        if (grenadeLaunchTimer <= 0)
+            LaunchGrenade(directionTowardsPlayer);
+        else grenadeLaunchTimer = Mathf.MoveTowards(grenadeLaunchTimer, 0, Time.deltaTime);
     }
 
-    public float wallTimerDelay = 5f;
-    public float wallTimer;
-    void MoveWalls()
+    void LaunchGrenade(Vector3 playerVector)
     {
-        if (wallTimer > 0)
-        {
-            wallTimer = Mathf.MoveTowards(wallTimer, 0, Time.deltaTime);
-            if (!isClosed)
-            {
-                foreach (var wall in walls)
-                    wall.transform.position += wall.transform.right * 1f * Time.deltaTime;
-            } else
-            {
-                foreach (var wall in walls)
-                    wall.transform.position -= wall.transform.right * 1f * Time.deltaTime;
-            }
-        } else
-        {
-            isClosed = isClosed ? false : true;
-            wallTimer = wallTimerDelay;
-            EndState();
-        }
+        grenadeLaunchTimer = grenadeLaunchDelay;
+        Vector3 directionTowardsPlayer = playerVector.normalized;
+        directionTowardsPlayer.y = -0.6f;
+        GameObject grenadeObject = GameObject.Instantiate(grenadePrefab, boss.transform.position + (directionTowardsPlayer * 2f), Quaternion.Euler(directionTowardsPlayer));
+        Rigidbody rb = grenadeObject.GetComponent<Rigidbody>();
+        rb.AddForce(directionTowardsPlayer * 20f, ForceMode.VelocityChange);
+        rb.AddTorque(-boss.transform.right * 10, ForceMode.VelocityChange);
     }
+
+    
 }
