@@ -43243,6 +43243,8 @@ MonoBehaviour:
   damagePS: {fileID: 8095970129049897404}
   killPS: {fileID: 0}
   health: 350
+  init_NoAI: 0
+  hard: 0
   grenade: {fileID: 935860278282618958, guid: 94f184c8a3ad9a54aa772d9975731292, type: 3}
   bigGrenade: {fileID: 935860278282618958, guid: 4e3fce72eb718cf4da826309301e0626,
     type: 3}
