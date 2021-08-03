@@ -69,9 +69,16 @@ public class MainMenu : MonoBehaviour
 
     public void PlayGame()
     {
+        startScreen.SetActive(false);
         GameManager.inst.LoadGame();
     }
     
+    public void ReturnToTitle()
+    {
+        startScreen.SetActive(false);
+        GameManager.inst.LoadTitleScreen();
+    }
+
     public void ExitGame()
     {
         if (!GameManager.inst.IsLoading)

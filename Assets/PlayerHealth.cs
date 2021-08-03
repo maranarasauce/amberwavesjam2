@@ -23,18 +23,17 @@ public class PlayerHealth : DamageableObject
     private void OnDisable()
     {
         OnKill -= PlayerHealth_OnKill;
-        if (!hurtSource.isPlaying)
-        {
-            hurtSource.clip = hurtClips.GetRandomValue();
-            hurtSource.Play();
-        }
-        
-        shake.ShakeScreen(1f, 0.2f);
     }
 
 
     private void PlayerHealth_OnDamage()
     {
+        if (!hurtSource.isPlaying)
+        {
+            hurtSource.clip = hurtClips.GetRandomValue();
+            hurtSource.Play();
+        }
+
         shake.ShakeScreen(1f, 0.2f);
     }
 
