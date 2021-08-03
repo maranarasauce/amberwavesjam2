@@ -79,7 +79,7 @@ public class OppressorAttack : AttackState
     Vector3 lastVel = Vector3.zero;
     void FireBullet(Vector3 fireDir)
     {
-        boss.PlaySFX(fireSfx, 0.4f, true);
+        boss.PlaySFX(fireSfx, 0.2f, true);
         GameObject.Instantiate(bossBullet, firePoint.position, Quaternion.LookRotation(fireDir));
     }
 

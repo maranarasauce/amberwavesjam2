@@ -243,7 +243,7 @@ public class Boss : DamageableObject
     public void Move(Vector3 position, bool additive)
     {
         if (additive)
-            position += transform.position;
+            position += transform.position * Time.deltaTime;
         Move(position);
     }
     #endregion

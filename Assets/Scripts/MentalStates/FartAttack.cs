@@ -76,7 +76,7 @@ public class FartAttack : AttackState
         if (6f < timeElapsed)
         {
             if (boss.transform.position.y < (centerPoint.y + 10f))
-                boss.Move(Vector3.up * 0.1f, true);
+                boss.Move(Vector3.up * 0.1f * 2f, true);
 
             if (timeElapsed > 10f)
             {

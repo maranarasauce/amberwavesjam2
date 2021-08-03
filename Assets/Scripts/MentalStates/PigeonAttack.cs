@@ -65,7 +65,7 @@ public class PigeonAttack : AttackState
     Vector3 lastVel = Vector3.zero;
     void FireBullet()
     {
-        boss.PlaySFX(fireSfx, 0.5f, true);
+        boss.PlaySFX(fireSfx, 0.2f, true);
 
         Vector3 targetPos = playerRb.transform.position;
 

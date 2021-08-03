@@ -23,7 +23,7 @@ public class DeathState : MentalState
     {
         base.Update();
         boss.maxDistanceDelta = 0.02f;
-        boss.Move(Vector3.down * 2f * Time.deltaTime, true);
+        boss.Move(Vector3.down * 2f, true);
         Collider[] cols = Physics.OverlapSphere(boss.transform.position, 5f, boss.collisionMask);
         foreach (Collider col in cols)
         {

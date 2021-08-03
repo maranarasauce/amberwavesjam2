@@ -67,7 +67,7 @@ public class ShockwaveAttack : AttackState
 
             boss.maxDistanceDelta = 0.02f;
 
-            boss.Move(Vector3.up * 0.1f, true);
+            boss.Move(Vector3.up * 0.1f * 2f, true);
         }
         //Slam down and land
         if (10f > TimeLeft && TimeLeft > 4f && !landed)
@@ -148,7 +148,7 @@ public class ShockwaveAttack : AttackState
             boss.maxDistanceDelta = 0.05f;
 
             if (boss.transform.position.y < centerPoint.y)
-                boss.Move(Vector3.up * 0.1f, true);
+                boss.Move(Vector3.up * 0.1f * 2f, true);
 
             if (delta > 5.75f)
             {
