@@ -6,6 +6,7 @@ using UnityEngine;
 public class DamageableObject : MonoBehaviour, IDamageable
 {
     public float Health { get => health; }
+    public bool IsDead  { get => isDead; }
     public float LastDamageValue { get => lastDamage; }
 
     [SerializeField] protected ParticleSystem damagePS;
@@ -15,6 +16,7 @@ public class DamageableObject : MonoBehaviour, IDamageable
     public event Action OnDamage;
     public event Action OnKill;
 
+    private bool isDead = false;
     private float lastDamage;
 
     protected virtual void Start()
@@ -38,7 +40,7 @@ public class DamageableObject : MonoBehaviour, IDamageable
 
         OnDamage?.Invoke();
 
-        if(health <= 0)
+        if(health <= 0 && !isDead)
         {
             Kill();
         }
@@ -51,6 +53,7 @@ public class DamageableObject : MonoBehaviour, IDamageable
 
     public void Kill()
     {
+        isDead = true;
         OnKill?.Invoke();
     }
 

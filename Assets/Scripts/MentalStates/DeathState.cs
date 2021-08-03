@@ -57,6 +57,6 @@ public class DeathState : MentalState
     {
         base.EndState();
         ended = true;
-        GameManager.instance.SwapActiveScene(SceneIndex.Win);
+        GameManager.inst.SwapActiveScene(SceneIndex.Win);
     }
 }
