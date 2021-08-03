@@ -44,7 +44,7 @@ public class MusicController : MonoBehaviour
         if (arenaMusiks.Count == 0)
             arenaMusiks.AddRange(arenaMusiksPool);
 
-        AudioClip clip = arenaMusiks[UnityEngine.Random.Range(0, arenaMusiks.Count + 1)];
+        AudioClip clip = arenaMusiks[UnityEngine.Random.Range(0, arenaMusiks.Count)];
         arenaMusiks.Remove(clip);
         arenaAudio.clip = clip;
         arenaAudio.Play();

@@ -133,7 +133,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 754692072692721345}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.15, z: 0.17}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1038039449266473076}
@@ -3442,8 +3442,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ammoCounter: {fileID: 3062676165374814221}
-  grenadeIcon: {fileID: 5161018772209060782}
-  grappleIcon: {fileID: 2595223256812075331}
   grenadeMask: {fileID: 2892322064103080127}
   grappleMask: {fileID: 3132578583736982774}
 --- !u!1 &9220214374456133849
